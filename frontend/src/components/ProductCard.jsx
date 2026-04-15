@@ -1,11 +1,14 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
+import { WishlistContext } from '../context/WishlistContext';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { FiHeart } from 'react-icons/fi';
 import './ProductCard.scss';
 
 const ProductCard = ({ product }) => {
   const { addToCart } = useContext(CartContext);
+  const { addToWishlist } = useContext(WishlistContext);
 
   const handleAddToCart = () => {
     addToCart(product.id, 1);
@@ -14,6 +17,9 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="productCard">
+      <div className="productCard__actionsOverlay">
+         <FiHeart className="productCard__wishlistIcon" onClick={() => addToWishlist(product.id)} title="Add to Wishlist" />
+      </div>
       <div className="productCard__info">
         <Link to={`/product/${product.id}`} className="productCard__link">
           <p className="productCard__title">{product.title}</p>

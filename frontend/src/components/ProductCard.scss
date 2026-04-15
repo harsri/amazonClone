@@ -1,4 +1,5 @@
 .productCard {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -16,6 +17,27 @@
   &:hover {
     transform: scale(1.02);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  &__actionsOverlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+  }
+
+  &__wishlistIcon {
+    font-size: 24px;
+    color: #ffd814;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    padding: 3px;
+
+    &:hover {
+      color: #e38200;
+      transform: scale(1.1);
+    }
   }
 
   &__info {

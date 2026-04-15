@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
 import api from '../utils/api';
@@ -8,12 +8,23 @@ import './Checkout.scss';
 
 const Checkout = () => {
   const { cartItems, cartTotal, clearCart } = useContext(CartContext);
-  const { user } = useContext(AuthContext);
+  const { user, updateAddress } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const [address, setAddress] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('DummyCard');
+  const [address, setAddress] = useState(user?.address || '');
+  const [useSavedAddress, setUseSavedAddress] = useState(!!user?.address);
+  // Restrict exactly to CashOnDelivery
+  const [paymentMethod, setPaymentMethod] = useState('CashOnDelivery');
   const [placing, setPlacing] = useState(false);
+
+  // Sync address changes if they uncheck useSavedAddress
+  useEffect(() => {
+    if (useSavedAddress && user?.address) {
+      setAddress(user.address);
+    } else if (useSavedAddress && !user?.address) {
+       setUseSavedAddress(false);
+    }
+  }, [useSavedAddress, user]);
 
   if (cartItems.length === 0) {
     return (
@@ -27,12 +38,22 @@ const Checkout = () => {
     e.preventDefault();
     setPlacing(true);
     try {
+      if (!useSavedAddress || address !== user?.address) {
+        if (updateAddress) await updateAddress(address);
+      }
+      
       await api.post('/orders', {
         address,
         paymentMethod
       });
       await clearCart();
-      toast.success("Order placed successfully!");
+      
+      // Flash Modal Trigger via Toast
+      toast.success("Order Placed Successfully! Please prepare cash on arrival.", { 
+         position: "top-center", 
+         autoClose: 5000 
+      });
+      
       navigate('/orders');
     } catch (error) {
       toast.error(error.response?.data?.error || "Failed to place order.");
@@ -53,13 +74,28 @@ const Checkout = () => {
             </div>
             <div className="checkout__address">
               <p>{user?.email}</p>
-              <textarea 
-                required 
-                placeholder="Enter full shipping address, e.g., 123 Amazon Way, Seattle, WA" 
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                rows={4}
-              />
+              
+              {user?.address && (
+                <div style={{marginBottom: '10px'}}>
+                  <label>
+                    <input 
+                      type="checkbox" 
+                      checked={useSavedAddress} 
+                      onChange={(e) => setUseSavedAddress(e.target.checked)} 
+                    /> Use Saved Address: {user.address}
+                  </label>
+                </div>
+              )}
+
+              {!useSavedAddress && (
+                 <textarea 
+                   required 
+                   placeholder="Enter full shipping address, e.g., 123 Amazon Way, Seattle, WA" 
+                   value={address}
+                   onChange={(e) => setAddress(e.target.value)}
+                   rows={4}
+                 />
+              )}
             </div>
           </div>
 
@@ -89,10 +125,9 @@ const Checkout = () => {
               <h3>Payment Method</h3>
             </div>
             <div className="checkout__paymentDetails">
-              <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
-                 <option value="DummyCard">Dummy Credit Card (Default)</option>
-                 <option value="CashOnDelivery">Cash on Delivery</option>
-              </select>
+              <div style={{marginBottom: '20px', padding: '10px', backgroundColor: '#f0f2f2', border: '1px solid #D5D9D9', borderRadius: '4px'}}>
+                 <strong>Payment Method:</strong> Cash on Delivery (COD) only.
+              </div>
 
               <div className="checkout__priceContainer">
                  <p className="checkout__total">Order Total: <strong>${cartTotal.toFixed(2)}</strong></p>

@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Cart.scss';
 
 const Cart = () => {
   const { cartItems, cartTotal, removeFromCart, updateQuantity } = useContext(CartContext);
+  const navigate = useNavigate();
 
   return (
     <div className="cart">
@@ -59,7 +60,13 @@ const Cart = () => {
           <small className="subtotal__gift">
             <input type="checkbox" /> This order contains a gift
           </small>
-          <button className="btn-primary" disabled={cartItems.length === 0}>Proceed to Checkout</button>
+          <button 
+             className="btn-primary" 
+             disabled={cartItems.length === 0}
+             onClick={() => navigate('/checkout')}
+          >
+             Proceed to Checkout
+          </button>
         </div>
       </div>
     </div>

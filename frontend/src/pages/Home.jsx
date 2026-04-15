@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import api from '../utils/api';
+import { useSearchParams } from 'react-router-dom';
 import './Home.scss';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
-        const response = await api.get('/products');
+        const query = searchParams.toString();
+        const response = await api.get(`/products${query ? `?${query}` : ''}`);
         setProducts(response.data.products || []);
       } catch (error) {
         console.error('Failed to fetch products:', error);
@@ -19,7 +23,7 @@ const Home = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [searchParams]);
 
   return (
     <div className="home">

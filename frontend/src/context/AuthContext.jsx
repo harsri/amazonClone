@@ -55,8 +55,13 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
+  const updateAddress = async (address) => {
+    const response = await api.put('/auth/address', { address });
+    setUser(response.data.user);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, token }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, token, updateAddress }}>
       {!loading && children}
     </AuthContext.Provider>
   );

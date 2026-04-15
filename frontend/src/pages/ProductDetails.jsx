@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { WishlistContext } from '../context/WishlistContext';
 import api from '../utils/api';
@@ -8,6 +8,7 @@ import './ProductDetails.scss';
 
 const ProductDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useContext(CartContext);
@@ -36,6 +37,11 @@ const ProductDetails = () => {
     } catch (error) {
       setDeliveryMsg("Error checking pincode or invalid pincode.");
     }
+  };
+
+  const handleBuyNow = () => {
+    addToCart(product.id, 1);
+    navigate('/checkout');
   };
 
   if (loading) return <div className="productDetails__loading">Loading...</div>;
@@ -78,10 +84,19 @@ const ProductDetails = () => {
           
           <button 
              className="btn-primary" 
+             style={{backgroundColor: '#ffa41c', borderColor: '#ff8f00', marginBottom: '10px'}}
              onClick={() => { addToCart(product.id, 1); toast.success("Added to cart"); }}
              disabled={product.stock <= 0}
           >
             Add to Cart
+          </button>
+
+          <button 
+             className="btn-primary" 
+             onClick={handleBuyNow}
+             disabled={product.stock <= 0}
+          >
+            Buy Now
           </button>
           
           <button 

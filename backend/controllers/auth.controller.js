@@ -100,6 +100,7 @@ const getMe = async (req, res) => {
         id: true,
         name: true,
         email: true,
+        address: true,
         createdAt: true
       }
     });
@@ -115,8 +116,36 @@ const getMe = async (req, res) => {
   }
 };
 
+const updateAddress = async (req, res) => {
+  try {
+    const { address } = req.body;
+    
+    if (!address) {
+      return res.status(400).json({ error: "Address is required." });
+    }
+
+    const user = await prisma.user.update({
+      where: { id: req.userId },
+      data: { address },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        address: true,
+        createdAt: true
+      }
+    });
+
+    res.status(200).json({ message: "Address updated successfully", user });
+  } catch (error) {
+    console.error("Update Address Error:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+};
+
 module.exports = {
   register,
   login,
-  getMe
+  getMe,
+  updateAddress
 };
