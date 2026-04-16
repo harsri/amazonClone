@@ -26,7 +26,7 @@ const Wishlist = () => {
                 <img src={item.product.images?.[0]?.url || 'https://via.placeholder.com/200x200.png?text=Item'} alt={item.product.title} />
                 <div className="wishItem__info">
                   <p>{item.product.title}</p>
-                  <strong>${item.product.price}</strong>
+                  <strong>₹{item.product.price.toLocaleString('en-IN')}</strong>
                   <div className="wishItem__actions">
                     <button className="btn-primary" onClick={() => handleAddToCart(item.productId, item.id)}>Move to Cart</button>
                     <button className="btn-secondary" onClick={() => removeFromWishlist(item.id)}>Remove</button>

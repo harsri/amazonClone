@@ -210,11 +210,18 @@
     &__body {
       padding: 18px;
 
-      .status-header h3 {
-        font-size: 18px;
-        font-weight: 700;
-        margin-bottom: 15px;
-        color: #0f1111;
+      .status-header {
+        &.cancelled h3 {
+          color: #b12704;
+          font-weight: 700;
+        }
+
+        h3 {
+          font-size: 18px;
+          font-weight: 700;
+          margin-bottom: 15px;
+          color: #0f1111;
+        }
       }
 
       .item-row {
@@ -272,7 +279,40 @@
       padding: 10px 18px;
       border-top: 1px solid #eee;
       font-size: 12px;
-      .link { color: #007185; cursor: pointer; &:hover { color: #c45500; text-decoration: underline; } }
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .footer-left {
+        display: flex;
+        gap: 10px;
+
+        .cancel-btn {
+          background: white;
+          border: 1px solid #adb1b8;
+          padding: 8px 16px;
+          border-radius: 4px;
+          font-size: 13px;
+          font-weight: 500;
+          color: #b12704;
+          cursor: pointer;
+          transition: all 0.2s;
+
+          &:hover {
+            background: #fee;
+            border-color: #b12704;
+          }
+        }
+      }
+
+      .link { 
+        color: #007185; 
+        cursor: pointer; 
+        &:hover { 
+          color: #c45500; 
+          text-decoration: underline; 
+        } 
+      }
     }
   }
 

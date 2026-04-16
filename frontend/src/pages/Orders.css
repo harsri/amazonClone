@@ -192,6 +192,10 @@
 .orders-page .order-card__body {
   padding: 18px;
 }
+.orders-page .order-card__body .status-header.cancelled h3 {
+  color: #b12704;
+  font-weight: 700;
+}
 .orders-page .order-card__body .status-header h3 {
   font-size: 18px;
   font-weight: 700;
@@ -249,6 +253,28 @@
   padding: 10px 18px;
   border-top: 1px solid #eee;
   font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.orders-page .order-card__footer .footer-left {
+  display: flex;
+  gap: 10px;
+}
+.orders-page .order-card__footer .footer-left .cancel-btn {
+  background: white;
+  border: 1px solid #adb1b8;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #b12704;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.orders-page .order-card__footer .footer-left .cancel-btn:hover {
+  background: #fee;
+  border-color: #b12704;
 }
 .orders-page .order-card__footer .link {
   color: #007185;

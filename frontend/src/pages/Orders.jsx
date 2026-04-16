@@ -236,7 +236,7 @@ const Orders = () => {
                 </div>
 
                 <div className="order-card__body">
-                  <div className="status-header">
+                  <div className={`status-header ${order.status === 'CANCELLED' ? 'cancelled' : ''}`}>
                     <h3>{order.status === 'DELIVERED' ? 'Delivered' : order.status}</h3>
                   </div>
                   
@@ -259,7 +259,6 @@ const Orders = () => {
                         <div className="item-side">
                           <button className="full-btn">Track package</button>
                           {order.status === 'DELIVERED' && <button className="full-btn secondary" onClick={() => handleReturn(order.id)}>Return items</button>}
-                          {['PENDING', 'PROCESSING'].includes(order.status) && <button className="full-btn secondary" onClick={() => handleCancel(order.id)}>Cancel order</button>}
                           <button className="full-btn secondary" onClick={() => openReviewModal(item.productId, item.product?.title, order.id)}>Leave product review</button>
                         </div>
                       </div>
@@ -268,6 +267,11 @@ const Orders = () => {
                 </div>
                 
                 <div className="order-card__footer">
+                  <div className="footer-left">
+                    {['PENDING', 'PROCESSING'].includes(order.status) && (
+                      <button className="cancel-btn" onClick={() => handleCancel(order.id)}>Cancel order</button>
+                    )}
+                  </div>
                   <span className="archive link">Archive order</span>
                 </div>
               </div>
