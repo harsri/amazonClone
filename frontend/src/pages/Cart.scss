@@ -71,6 +71,13 @@
     &.outOfStock { color: #B12704; }
   }
 
+  &__lowStock {
+    font-size: 13px;
+    color: #B12704;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+  }
+
   &__actions {
     display: flex;
     align-items: center;

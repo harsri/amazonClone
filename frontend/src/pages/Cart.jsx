@@ -44,8 +44,11 @@ const Cart = () => {
                 </Link>
                 {item.product.brand && <p className="cartItem__brand">by {item.product.brand}</p>}
                 <p className={`cartItem__stock ${item.product.stock > 0 ? 'inStock' : 'outOfStock'}`}>
-                  {item.product.stock > 0 ? 'In Stock' : 'Out of Stock'}
+                  {item.product.stock > 0 ? `✓ ${item.product.stock} in stock` : 'Out of Stock'}
                 </p>
+                {item.product.stock > 0 && item.product.stock <= 2 && (
+                  <p className="cartItem__lowStock">Only {item.product.stock} left - order soon!</p>
+                )}
                 <div className="cartItem__actions">
                   <label className="cartItem__qty">
                     Qty:

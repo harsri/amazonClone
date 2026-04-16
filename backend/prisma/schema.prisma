@@ -64,6 +64,7 @@ model Product {
   price         Float
   originalPrice Float?
   stock         Int      @default(0)
+  stockResetAt  DateTime @default(now())
   ratings       Float    @default(0.0)
   ratingCount   Int      @default(0)
   features      String?  @db.Text

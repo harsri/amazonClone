@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import api from '../utils/api';
 import { AuthContext } from './AuthContext';
+import { toast } from 'react-toastify';
 
 export const CartContext = createContext();
 
@@ -37,7 +38,6 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = async (productId, quantity = 1) => {
     if (!user) {
-        // Here you would optimally handle redirect to login
         alert('Please login to add items to your cart.');
         return;
     }
@@ -46,6 +46,8 @@ export const CartProvider = ({ children }) => {
       fetchCart();
     } catch (error) {
       console.error('Failed to add to cart:', error);
+      const errorMsg = error.response?.data?.error || 'Failed to add to cart.';
+      toast.error(errorMsg);
     }
   };
 
@@ -55,6 +57,7 @@ export const CartProvider = ({ children }) => {
       fetchCart();
     } catch (error) {
       console.error('Failed to remove item:', error);
+      toast.error('Failed to remove from cart.');
     }
   };
 
@@ -65,6 +68,9 @@ export const CartProvider = ({ children }) => {
       fetchCart();
     } catch (error) {
       console.error('Failed to update quantity:', error);
+      const errorMsg = error.response?.data?.error || 'Failed to update quantity.';
+      toast.error(errorMsg);
+      fetchCart(); // Refresh to show actual quantity
     }
   };
 

@@ -1,6 +1,9 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+// Helper function to generate random stock between 5 and 100
+const getRandomStock = () => Math.floor(Math.random() * 96) + 5; // 5-100
+
 async function main() {
   console.log('🌱 Seeding Amazon 247 database with 100+ products...');
 
@@ -188,6 +191,8 @@ async function main() {
     // Calculate original price (20-30% higher than selling price for discount effect)
     const discountPercent = 15 + Math.floor(Math.random() * 15); // 15-30% discount
     const originalPrice = Math.round(prod.price * (100 + discountPercent) / 100);
+    // Generate random stock between 5-100
+    const randomStock = 5 + Math.floor(Math.random() * 96); // 5-100
     
     const created = await prisma.product.create({
       data: {
@@ -198,7 +203,8 @@ async function main() {
         brand: prod.brand,
         price: prod.price,
         originalPrice: originalPrice,
-        stock: prod.stock,
+        stock: randomStock,
+        stockResetAt: new Date(),
         ratings: prod.ratings,
         ratingCount: prod.ratingCount,
         freeDelivery: true,

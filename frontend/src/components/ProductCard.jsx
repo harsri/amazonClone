@@ -82,6 +82,27 @@ const ProductCard = ({ product }) => {
     toggleWishlist(product.id);
   };
 
+  // Calculate stock reset time if stock is 0
+  const getStockResetTime = () => {
+    if (product.stock === 0 && product.stockResetAt) {
+      const resetTime = new Date(product.stockResetAt);
+      const now = new Date();
+      resetTime.setHours(resetTime.getHours() + 24);
+      
+      const hoursLeft = Math.ceil((resetTime - now) / (1000 * 60 * 60));
+      const minutesLeft = Math.ceil(((resetTime - now) % (1000 * 60 * 60)) / (1000 * 60));
+      
+      if (hoursLeft > 0) {
+        return `Back in stock in ~${hoursLeft}h`;
+      }
+      return 'Available in a moment';
+    }
+    return null;
+  };
+
+  const stockResetTime = getStockResetTime();
+  const isOutOfStock = product.stock === 0;
+
   return (
     <Link to={`/product/${product.id}`} className="productCard">
       {product.isPremium && (
@@ -128,9 +149,22 @@ const ProductCard = ({ product }) => {
           {product.stock > 0 && product.stock <= 2 && (
             <p className="productCard__stockWarning">Only {product.stock} left in stock.</p>
           )}
+          {product.stock === 0 && (
+            <p className="productCard__stockWarning">Out of stock. {stockResetTime}</p>
+          )}
+          {product.stock > 0 && (
+            <p className="productCard__stockAvailable">✓ {product.stock} in stock</p>
+          )}
         </div>
       </div>
-      <button className="productCard__cartBtn" onClick={handleAddToCart}>Add to Cart</button>
+      <button 
+        className="productCard__cartBtn" 
+        onClick={handleAddToCart}
+        disabled={isOutOfStock}
+        title={isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+      >
+        {isOutOfStock ? 'Out of Stock' : 'Add to Cart'}
+      </button>
     </Link>
   );
 };

@@ -1,6 +1,25 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+// ─── Helper: Check and Reset Stock After 24 Hours ──────────────────────
+const checkAndResetStock = async (product) => {
+  if (product.stock === 0) {
+    const now = new Date();
+    const resetTime = new Date(product.stockResetAt);
+    const hoursElapsed = (now - resetTime) / (1000 * 60 * 60);
+
+    if (hoursElapsed >= 24) {
+      // Reset stock to 100 after 24 hours
+      await prisma.product.update({
+        where: { id: product.id },
+        data: { stock: 100, stockResetAt: new Date() }
+      });
+      return { ...product, stock: 100, stockResetAt: new Date() };
+    }
+  }
+  return product;
+};
+
 const getProducts = async (req, res) => {
   try {
     const { category, search, minPrice, maxPrice, sort, brand } = req.query;
@@ -44,7 +63,12 @@ const getProducts = async (req, res) => {
       }
     });
 
-    res.status(200).json({ products });
+    // Check and reset stock for products with 0 stock after 24 hours
+    const updatedProducts = await Promise.all(
+      products.map(product => checkAndResetStock(product))
+    );
+
+    res.status(200).json({ products: updatedProducts });
   } catch (error) {
     console.error("Get Products Error:", error);
     res.status(500).json({ error: "Internal server error." });
@@ -67,7 +91,10 @@ const getProductById = async (req, res) => {
        return res.status(404).json({ error: "Product not found." });
     }
 
-    res.status(200).json({ product });
+    // Check and reset stock if 24 hours have passed and stock is 0
+    const updatedProduct = await checkAndResetStock(product);
+
+    res.status(200).json({ product: updatedProduct });
   } catch (error) {
     console.error("Get Product By ID Error:", error);
     res.status(500).json({ error: "Internal server error." });
