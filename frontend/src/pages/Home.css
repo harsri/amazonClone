@@ -230,21 +230,24 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   max-width: 1400px;
-  margin: -100px auto 20px;
+  margin: -100px auto 50px;
   position: relative;
   z-index: 10;
   padding: 0 16px;
+  padding-bottom: 20px;
 }
 @media (max-width: 1200px) {
   .home__grids {
     grid-template-columns: repeat(2, 1fr);
     margin-top: -50px;
+    margin-bottom: 40px;
   }
 }
 @media (max-width: 600px) {
   .home__grids {
     grid-template-columns: repeat(1, 1fr);
     margin-top: 0;
+    margin-bottom: 30px;
   }
 }
 .home__gridCard {
@@ -306,6 +309,78 @@
   display: flex;
   justify-content: center;
   padding: 60px;
+}
+.home__productSections {
+  width: 100%;
+  background: #e3e6e6;
+  padding: 40px 0 80px 0;
+  margin: 20px 0 0 0;
+  border-top: 8px solid #ddd;
+}
+.home__productSection {
+  max-width: 1400px;
+  margin: 0 auto 70px auto;
+  padding: 24px 20px;
+  background-color: #ffffff;
+  border-radius: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+.home__productSection:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 768px) {
+  .home__productSection {
+    margin: 0 auto 40px auto;
+    padding: 16px 12px;
+  }
+}
+.home__sectionTitle {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0 0 24px 0;
+  color: #0f1111;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e0e0e0;
+  letter-spacing: 0.5px;
+}
+.home__productGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+@media (max-width: 1220px) {
+  .home__productGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+}
+@media (max-width: 768px) {
+  .home__productGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+@media (max-width: 480px) {
+  .home__productGrid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
+.home__seeAllLink {
+  display: inline-block;
+  font-size: 15px;
+  color: #007185;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 10px 16px;
+  background: #f0f2f2;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+.home__seeAllLink:hover {
+  background: #e0e4e4;
+  color: #c45500;
 }
 .home__spinner {
   width: 40px;

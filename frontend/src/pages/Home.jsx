@@ -30,6 +30,7 @@ const CAROUSEL_IMAGES = [
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [categoryProducts, setCategoryProducts] = useState({});
   const [loading, setLoading] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [showFilters, setShowFilters] = useState(false);
@@ -64,6 +65,24 @@ const Home = () => {
     };
     fetchProducts();
   }, [searchParams]);
+
+  // Fetch products by category for home page grid sections
+  useEffect(() => {
+    if (!isSearchActive) {
+      const categories = ['Electronics', 'Fashion', 'Home & Kitchen', 'Books'];
+      const fetchCategoryProducts = async () => {
+        const data = {};
+        for (const cat of categories) {
+          try {
+            const res = await api.get(`/products?category=${cat}`);
+            data[cat] = res.data.products?.slice(0, 4) || [];
+          } catch (err) { console.error(err); }
+        }
+        setCategoryProducts(data);
+      };
+      fetchCategoryProducts();
+    }
+  }, [isSearchActive]);
 
   const updateParam = (key, value) => {
     const params = new URLSearchParams(searchParams);
@@ -148,6 +167,23 @@ const Home = () => {
               </div>
             ))}
           </div>
+
+          {/* Product Grid Sections */}
+          <div className="home__productSections">
+            {Object.entries(categoryProducts).map(([category, prods]) => (
+              prods.length > 0 && (
+                <div key={category} className="home__productSection">
+                  <h2 className="home__sectionTitle">{category}</h2>
+                  <div className="home__productGrid">
+                    {prods.map(product => (
+                      <ProductCard key={product.id} product={product} />
+                    ))}
+                  </div>
+                  <Link to={`/?category=${category}`} className="home__seeAllLink">See all {category}</Link>
+                </div>
+              )
+            ))}
+          </div>
         </>
       )}
 
@@ -212,20 +248,22 @@ const Home = () => {
         )}
 
         <div className="home__main">
-          {loading ? (
-            <div className="home__loading"><div className="home__spinner" /></div>
-          ) : (
-            <>
-              {isSearchActive && products.length === 0 && (
-                <div className="home__empty">
-                  <h3>No results found</h3>
-                  <p>Try different keywords or clear filters.</p>
+          {isSearchActive && (
+            loading ? (
+              <div className="home__loading"><div className="home__spinner" /></div>
+            ) : (
+              <>
+                {products.length === 0 && (
+                  <div className="home__empty">
+                    <h3>No results found</h3>
+                    <p>Try different keywords or clear filters.</p>
+                  </div>
+                )}
+                <div className="home__row">
+                  {products.map(product => <ProductCard key={product.id} product={product} />)}
                 </div>
-              )}
-              <div className="home__row">
-                {products.map(product => <ProductCard key={product.id} product={product} />)}
-              </div>
-            </>
+              </>
+            )
           )}
         </div>
       </div>
