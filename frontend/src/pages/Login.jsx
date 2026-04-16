@@ -1,14 +1,17 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
+import api from '../utils/api';
 import { toast } from 'react-toastify';
 import './Login.scss';
 
 const Login = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [mode, setMode] = useState('login'); // 'login', 'register', 'forgot', 'reset'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
+  const [otp, setOtp] = useState('');
+  const [newPassword, setNewPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -18,15 +21,25 @@ const Login = () => {
 
   const from = location.state?.from?.pathname || '/';
 
-  const handleSubmit = async (e) => {
+  const resetFields = () => {
+    setError('');
+    setEmail('');
+    setPassword('');
+    setName('');
+    setOtp('');
+    setNewPassword('');
+  };
+
+  const handleAuth = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
     try {
-      if (isLogin) {
+      if (mode === 'login') {
         await login(email, password);
         toast.success('Welcome back!');
-      } else {
+        navigate(from, { replace: true });
+      } else if (mode === 'register') {
         if (password.length < 6) {
           setError('Password must be at least 6 characters.');
           setLoading(false);
@@ -34,8 +47,17 @@ const Login = () => {
         }
         await register(name, email, password);
         toast.success('Account created successfully!');
+        navigate(from, { replace: true });
+      } else if (mode === 'forgot') {
+        await api.post('/auth/forgot-password', { email });
+        toast.success('OTP sent to your email.');
+        setMode('reset');
+      } else if (mode === 'reset') {
+        await api.post('/auth/reset-password', { email, otp, newPassword });
+        toast.success('Password reset successful! Please sign in.');
+        resetFields();
+        setMode('login');
       }
-      navigate(from, { replace: true });
     } catch (err) {
       const msg = err.response?.data?.error || 'Something went wrong. Please try again.';
       setError(msg);
@@ -44,22 +66,22 @@ const Login = () => {
     }
   };
 
-  const switchMode = () => {
-    setIsLogin(v => !v);
-    setError('');
-    setEmail('');
-    setPassword('');
-    setName('');
-  };
-
   return (
     <div className="login">
       <Link to="/">
-        <div className="login__logo">🛒 AmazonClone</div>
+        <div className="login__logo">
+          <span className="logo-text">amazon</span>
+          <span className="logo-suffix">247</span>
+        </div>
       </Link>
 
       <div className="login__container">
-        <h1>{isLogin ? 'Sign in' : 'Create account'}</h1>
+        <h1>
+          {mode === 'login' && 'Sign in'}
+          {mode === 'register' && 'Create account'}
+          {mode === 'forgot' && 'Password assistance'}
+          {mode === 'reset' && 'Reset your password'}
+        </h1>
 
         {error && (
           <div className="login__error">
@@ -67,8 +89,8 @@ const Login = () => {
           </div>
         )}
 
-        <form onSubmit={handleSubmit}>
-          {!isLogin && (
+        <form onSubmit={handleAuth}>
+          {mode === 'register' && (
             <div className="login__field">
               <label>Your name</label>
               <input
@@ -82,48 +104,104 @@ const Login = () => {
             </div>
           )}
 
-          <div className="login__field">
-            <label>Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              placeholder="you@example.com"
-              autoComplete="email"
-            />
-          </div>
+          {(mode === 'login' || mode === 'register' || mode === 'forgot' || mode === 'reset') && (
+            <div className="login__field">
+              <label>Email</label>
+              <input
+                type="email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                disabled={mode === 'reset'}
+                placeholder="you@example.com"
+                autoComplete="email"
+              />
+            </div>
+          )}
 
-          <div className="login__field">
-            <label>Password</label>
-            <input
-              type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              placeholder={isLogin ? 'Enter your password' : 'At least 6 characters'}
-              autoComplete={isLogin ? 'current-password' : 'new-password'}
-            />
-          </div>
+          {(mode === 'login' || mode === 'register') && (
+            <div className="login__field">
+              <div className="login__labelRow">
+                <label>Password</label>
+                {mode === 'login' && (
+                  <span className="login__forgotLink" onClick={() => { resetFields(); setMode('forgot'); }}>
+                    Forgot Password?
+                  </span>
+                )}
+              </div>
+              <input
+                type="password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                placeholder={mode === 'login' ? 'Enter your password' : 'At least 6 characters'}
+                autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+              />
+            </div>
+          )}
+
+          {mode === 'reset' && (
+            <>
+              <div className="login__field">
+                <label>Enter OTP</label>
+                <input
+                  type="text"
+                  value={otp}
+                  onChange={e => setOtp(e.target.value)}
+                  required
+                  placeholder="6-digit code from your email"
+                />
+              </div>
+              <div className="login__field">
+                <label>New Password</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={e => setNewPassword(e.target.value)}
+                  required
+                  placeholder="At least 6 characters"
+                />
+              </div>
+            </>
+          )}
 
           <button
             type="submit"
             className="login__signInButton"
             disabled={loading}
           >
-            {loading ? (isLogin ? 'Signing in...' : 'Creating account...') : (isLogin ? 'Sign In' : 'Create your Amazon account')}
+            {loading ? 'Processing...' : (
+              mode === 'login' ? 'Sign In' : 
+              mode === 'register' ? 'Create your Amazon account' :
+              mode === 'forgot' ? 'Continue' : 'Set new password'
+            )}
           </button>
         </form>
 
+        {mode === 'forgot' && (
+          <p className="login__helpText">
+            Enter the email address associated with your Amazon 247 account and we'll send you an OTP to reset your password.
+          </p>
+        )}
+
         <p className="login__terms">
-          By continuing, you agree to AmazonClone's Conditions of Use and Privacy Notice.
+          By continuing, you agree to Amazon 247's Conditions of Use and Privacy Notice.
         </p>
 
-        <div className="login__divider"><span>New to AmazonClone?</span></div>
+        {mode === 'login' && (
+          <>
+            <div className="login__divider"><span>New to Amazon 247?</span></div>
+            <button className="login__registerButton" onClick={() => { resetFields(); setMode('register'); }} type="button">
+              Create your Amazon account
+            </button>
+          </>
+        )}
 
-        <button className="login__registerButton" onClick={switchMode} type="button">
-          {isLogin ? 'Create your Amazon account' : '← Back to Sign In'}
-        </button>
+        {(mode === 'register' || mode === 'forgot' || mode === 'reset') && (
+          <button className="login__registerButton secondary" onClick={() => { resetFields(); setMode('login'); }} type="button">
+            ← Back to Sign In
+          </button>
+        )}
       </div>
     </div>
   );

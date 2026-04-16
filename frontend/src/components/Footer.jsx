@@ -20,7 +20,7 @@ const Footer = () => {
         <div className="footer__linkCol">
           <h3>Make Money with Us</h3>
           <ul>
-            <li><Link to="/support">Sell products on AmazonClone</Link></li>
+            <li><Link to="/support">Sell products on Amazon 247</Link></li>
             <li><Link to="/support">Become an Affiliate</Link></li>
             <li><Link to="/support">Advertise Your Products</Link></li>
           </ul>
@@ -40,7 +40,7 @@ const Footer = () => {
            <Link to="/support">Privacy Notice</Link>
            <Link to="/support">Interest-Based Ads</Link>
          </div>
-        <p>&copy; 2026 AmazonClone. Educational purposes only.</p>
+        <p>&copy; 2026 Amazon 247. All rights reserved.</p>
       </div>
     </footer>
   );

@@ -2,6 +2,15 @@ import React, { useState, useEffect, useContext } from 'react';
 import api from '../utils/api';
 import { AuthContext } from '../context/AuthContext';
 import { toast } from 'react-toastify';
+import { 
+  FiChevronDown, 
+  FiChevronRight, 
+  FiBook, 
+  FiMail, 
+  FiTag, 
+  FiMapPin, 
+  FiPhone 
+} from 'react-icons/fi';
 import './Support.scss';
 
 const FAQS = [
@@ -60,9 +69,17 @@ const Support = () => {
       <div className="support__container">
         {/* Tabs */}
         <div className="support__tabs">
-          <button className={`support__tab ${activeTab === 'faq' ? 'active' : ''}`} onClick={() => setActiveTab('faq')}>📖 FAQ</button>
-          <button className={`support__tab ${activeTab === 'contact' ? 'active' : ''}`} onClick={() => setActiveTab('contact')}>✉️ Contact Us</button>
-          {user && <button className={`support__tab ${activeTab === 'tickets' ? 'active' : ''}`} onClick={() => setActiveTab('tickets')}>🎫 My Tickets ({tickets.length})</button>}
+          <button className={`support__tab ${activeTab === 'faq' ? 'active' : ''}`} onClick={() => setActiveTab('faq')}>
+            <FiBook /> FAQ
+          </button>
+          <button className={`support__tab ${activeTab === 'contact' ? 'active' : ''}`} onClick={() => setActiveTab('contact')}>
+            <FiMail /> Contact Us
+          </button>
+          {user && (
+            <button className={`support__tab ${activeTab === 'tickets' ? 'active' : ''}`} onClick={() => setActiveTab('tickets')}>
+              <FiTag /> My Tickets ({tickets.length})
+            </button>
+          )}
         </div>
 
         {/* FAQ */}
@@ -72,7 +89,7 @@ const Support = () => {
               <div className={`support__faqItem ${openFaq === i ? 'open' : ''}`} key={i}>
                 <button className="support__faqQ" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
                   {faq.q}
-                  <span>{openFaq === i ? '▼' : '▶'}</span>
+                  <span>{openFaq === i ? <FiChevronDown /> : <FiChevronRight />}</span>
                 </button>
                 {openFaq === i && <p className="support__faqA">{faq.a}</p>}
               </div>
@@ -85,9 +102,9 @@ const Support = () => {
           <div className="support__form">
             <h2>Contact Us</h2>
             <div className="support__directContact">
-              <p>📍 <strong>Headquarters:</strong> AmazonClone Towers, Tech Park, Bengaluru, India 560001</p>
-              <p>📞 <strong>Phone:</strong> 1800-123-4567 (Toll Free, 24x7)</p>
-              <p>✉️ <strong>Email:</strong> support@amazonclone.in</p>
+              <p><FiMapPin className="icon" /> <strong>Headquarters:</strong> Amazon 247 Towers, Tech Park, Bengaluru, India 560001</p>
+              <p><FiPhone className="icon" /> <strong>Phone:</strong> 1800-123-4567 (Toll Free, 24x7)</p>
+              <p><FiMail className="icon" /> <strong>Email:</strong> support@amazon247.in</p>
             </div>
             
             <hr style={{ margin: '20px 0', border: 'none', borderTop: '1px solid #eee' }} />

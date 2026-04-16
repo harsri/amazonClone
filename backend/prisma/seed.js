@@ -2,182 +2,215 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding database...');
+  console.log('🌱 Seeding Amazon 247 database with 100+ products...');
 
-  const catElectronics = await prisma.category.upsert({
-    where: { name: 'Electronics' }, update: {},
-    create: { name: 'Electronics', description: 'Gadgets, phones, laptops and more.' }
-  });
-  const catFashion = await prisma.category.upsert({
-    where: { name: 'Fashion' }, update: {},
-    create: { name: 'Fashion', description: 'Clothing, footwear and accessories.' }
-  });
-  const catBooks = await prisma.category.upsert({
-    where: { name: 'Books' }, update: {},
-    create: { name: 'Books', description: 'Novels, self-help, academics and more.' }
-  });
-  const catHome = await prisma.category.upsert({
-    where: { name: 'Home & Kitchen' }, update: {},
-    create: { name: 'Home & Kitchen', description: 'Appliances, cookware and home decor.' }
-  });
+  // ─── Categories ──────────────────────────────────────────────────────
+  const catElectronics = await prisma.category.upsert({ where: { name: 'Electronics' }, update: {}, create: { name: 'Electronics', description: 'Gadgets, phones, laptops and more.' } });
+  const catFashion = await prisma.category.upsert({ where: { name: 'Fashion' }, update: {}, create: { name: 'Fashion', description: 'Clothing, footwear and accessories.' } });
+  const catBooks = await prisma.category.upsert({ where: { name: 'Books' }, update: {}, create: { name: 'Books', description: 'Novels, self-help, academics and more.' } });
+  const catHome = await prisma.category.upsert({ where: { name: 'Home & Kitchen' }, update: {}, create: { name: 'Home & Kitchen', description: 'Appliances, cookware and home decor.' } });
+  const catBeauty = await prisma.category.upsert({ where: { name: 'Beauty & Health' }, update: {}, create: { name: 'Beauty & Health', description: 'Personal care, grooming and health.' } });
+  const catSports = await prisma.category.upsert({ where: { name: 'Sports & Outdoors' }, update: {}, create: { name: 'Sports & Outdoors', description: 'Fitness, sports equipment and outdoor gear.' } });
+  const catToys = await prisma.category.upsert({ where: { name: 'Toys & Games' }, update: {}, create: { name: 'Toys & Games', description: 'Toys, board games, puzzles and more.' } });
+  const catGrocery = await prisma.category.upsert({ where: { name: 'Grocery' }, update: {}, create: { name: 'Grocery', description: 'Daily essentials, snacks and beverages.' } });
 
-  const products = [
-    {
-      title: 'Amazon Echo Dot (5th Gen)',
-      description: 'Meet Echo Dot — Our most popular smart speaker with Alexa. The sleek, compact design delivers crisp vocals and balanced bass for full sound.',
-      features: JSON.stringify(['Built-in Alexa voice assistant', 'Improved audio quality with deeper bass', 'Smart home device control', 'Set timers and alarms hands-free', 'Stream music from Spotify, Amazon Music']),
-      tags: 'smart speaker,alexa,echo,voice assistant,bluetooth speaker,wireless,amazon device',
-      brand: 'Amazon', price: 3499, stock: 100, ratings: 4.5, ratingCount: 1240,
-      categoryId: catElectronics.id,
-      images: [
-        'https://picsum.photos/seed/echo1/600/600',
-        'https://picsum.photos/seed/echo2/600/600',
-        'https://picsum.photos/seed/echo3/600/600'
-      ]
-    },
-    {
-      title: 'Apple iPhone 15 Pro',
-      description: 'iPhone 15 Pro features aerospace-grade titanium design, A17 Pro chip, 48MP pro camera system, and USB-C with USB 3 speeds.',
-      features: JSON.stringify(['A17 Pro chip with 6-core GPU', '48MP Main camera with optical zoom', 'Titanium design', 'Action button', 'USB-C with USB 3', 'Up to 29 hours video playback']),
-      tags: 'iphone,apple,phone,mobile,smartphone,5g,camera phone,ios,titanium',
-      brand: 'Apple', price: 134900, stock: 50, ratings: 4.8, ratingCount: 3450,
-      categoryId: catElectronics.id,
-      images: [
-        'https://picsum.photos/seed/iphone1/600/600',
-        'https://picsum.photos/seed/iphone2/600/600',
-        'https://picsum.photos/seed/iphone3/600/600'
-      ]
-    },
-    {
-      title: 'Sony WH-1000XM5 Wireless Headphones',
-      description: 'Industry-leading noise canceling headphones with Dual Noise Sensor technology. 30-hour battery life with quick charge.',
-      features: JSON.stringify(['Industry-leading noise cancellation', '30-hour battery life', 'Multipoint connection', 'Touch sensor controls', 'Speak-to-chat', 'Foldable design']),
-      tags: 'headphones,sony,wireless,bluetooth,noise cancelling,music,audio,over ear,anc',
-      brand: 'Sony', price: 24990, stock: 25, ratings: 4.7, ratingCount: 892,
-      categoryId: catElectronics.id,
-      images: [
-        'https://picsum.photos/seed/sony1/600/600',
-        'https://picsum.photos/seed/sony2/600/600',
-        'https://picsum.photos/seed/sony3/600/600'
-      ]
-    },
-    {
-      title: 'Samsung Galaxy Tab S9',
-      description: 'Galaxy Tab S9 with Dynamic AMOLED 2X display, Snapdragon 8 Gen 2, S Pen included, and IP68 water resistance.',
-      features: JSON.stringify(['11" Dynamic AMOLED 2X', 'Snapdragon 8 Gen 2', 'S Pen included', 'IP68 rated', '8400mAh battery', '256GB expandable storage']),
-      tags: 'tablet,samsung,galaxy,android,s pen,drawing tablet,portable,computing',
-      brand: 'Samsung', price: 68999, stock: 30, ratings: 4.6, ratingCount: 567,
-      categoryId: catElectronics.id,
-      images: [
-        'https://picsum.photos/seed/tab1/600/600',
-        'https://picsum.photos/seed/tab2/600/600'
-      ]
-    },
-    {
-      title: 'boAt Rockerz 450 Bluetooth Headphones',
-      description: 'Wireless headphones with 40mm drivers, 15 hour battery, padded ear cushions. Ideal for gym, travel and daily commute.',
-      features: JSON.stringify(['40mm dynamic drivers', '15 hours playback', 'Soft padded ear cushions', 'Lightweight 225g', 'Built-in mic for calls', 'Dual connectivity: BT+AUX']),
-      tags: 'headphones,boat,bluetooth,wireless,budget,music,earphones,gym headphones',
-      brand: 'boAt', price: 1299, stock: 200, ratings: 4.1, ratingCount: 18500,
-      categoryId: catElectronics.id,
-      images: [
-        'https://picsum.photos/seed/boat1/600/600',
-        'https://picsum.photos/seed/boat2/600/600'
-      ]
-    },
-    {
-      title: "Men's Slim Fit Formal Shirt",
-      description: "Premium quality slim fit formal shirt crafted from 100% pure cotton. Wrinkle-resistant fabric suitable for offices and formal events.",
-      features: JSON.stringify(['100% cotton', 'Slim fit', 'Machine washable', 'Wrinkle-resistant', 'Multiple colors', 'Full button-down']),
-      tags: 'shirt,formal,mens,cotton,office wear,slim fit,clothing,fashion',
-      brand: 'Arrow', price: 1299, stock: 200, ratings: 4.2, ratingCount: 2310,
-      categoryId: catFashion.id,
-      images: [
-        'https://picsum.photos/seed/shirt1/600/600',
-        'https://picsum.photos/seed/shirt2/600/600'
-      ]
-    },
-    {
-      title: 'Running Sports Shoes',
-      description: 'Lightweight breathable running shoes with EVA cushioned midsole and rubber outsole for traction on all surfaces.',
-      features: JSON.stringify(['Mesh upper for breathability', 'EVA midsole', 'Rubber outsole', 'Padded collar', 'Standard lace-up', 'Gym & running compatible']),
-      tags: 'shoes,running,sports,nike,sneakers,gym shoes,footwear,athletic',
-      brand: 'Nike', price: 4999, stock: 150, ratings: 4.4, ratingCount: 1820,
-      categoryId: catFashion.id,
-      images: [
-        'https://picsum.photos/seed/shoes1/600/600',
-        'https://picsum.photos/seed/shoes2/600/600'
-      ]
-    },
-    {
-      title: 'Atomic Habits by James Clear',
-      description: 'A proven framework for improving every day. Practical strategies to form good habits, break bad ones, and master tiny behaviors.',
-      features: JSON.stringify(['320 pages', 'English', 'Penguin Random House', 'Self-Help Bestseller', '15M+ copies sold']),
-      tags: 'book,habits,self help,bestseller,james clear,productivity,life improvement',
-      brand: 'Penguin', price: 399, stock: 80, ratings: 4.9, ratingCount: 45600,
-      categoryId: catBooks.id,
-      images: [
-        'https://picsum.photos/seed/atomic1/600/600',
-        'https://picsum.photos/seed/atomic2/600/600'
-      ]
-    },
-    {
-      title: 'The Alchemist by Paulo Coelho',
-      description: "A mystical story of Santiago, an Andalusian shepherd boy who yearns to travel in search of a worldly treasure as extravagant as any ever found.",
-      features: JSON.stringify(['208 pages', 'English', 'HarperCollins', '65M copies sold', '80 languages']),
-      tags: 'book,novel,fiction,bestseller,paulo coelho,classic,spiritual,journey',
-      brand: 'HarperCollins', price: 299, stock: 120, ratings: 4.7, ratingCount: 32100,
-      categoryId: catBooks.id,
-      images: [
-        'https://picsum.photos/seed/alch1/600/600'
-      ]
-    },
-    {
-      title: 'Philips Air Fryer HD9252',
-      description: 'Cook with up to 90% less fat. Rapid Air Technology for crispy results. 4.1L capacity, 7 presets, dishwasher safe parts.',
-      features: JSON.stringify(['90% less fat', '4.1L capacity', 'Rapid Air Tech', '7 presets', 'Dishwasher safe', '15-min auto shut off']),
-      tags: 'air fryer,kitchen,cooking,philips,healthy cooking,appliance,frying,baking',
-      brand: 'Philips', price: 7999, stock: 45, ratings: 4.3, ratingCount: 3780,
-      categoryId: catHome.id,
-      images: [
-        'https://picsum.photos/seed/fryer1/600/600',
-        'https://picsum.photos/seed/fryer2/600/600'
-      ]
-    },
-    {
-      title: 'Milton Thermosteel Flask 1L',
-      description: 'Keeps beverages hot/cold for 24 hours. 100% leak-proof, food-grade stainless steel, BPA free.',
-      features: JSON.stringify(['Hot/Cold 24 hours', '1000ml', 'Stainless steel', 'Leak-proof', 'Wide mouth', 'BPA Free']),
-      tags: 'flask,water bottle,thermos,steel,travel,hot water,cold water,insulated',
-      brand: 'Milton', price: 649, stock: 300, ratings: 4.5, ratingCount: 12400,
-      categoryId: catHome.id,
-      images: [
-        'https://picsum.photos/seed/flask1/600/600',
-        'https://picsum.photos/seed/flask2/600/600'
-      ]
-    },
-    {
-      title: 'Realme Narzo 60 5G Smartphone',
-      description: 'Powerful 5G smartphone with 6.4" AMOLED display, Dimensity 6100+, 50MP AI camera, 5000mAh battery with 33W fast charge.',
-      features: JSON.stringify(['6.4" AMOLED display', 'Dimensity 6100+', '50MP AI camera', '5000mAh battery', '33W SUPERVOOC', '128GB storage']),
-      tags: 'phone,mobile,smartphone,realme,5g,android,budget phone,camera phone',
-      brand: 'Realme', price: 14999, stock: 75, ratings: 4.3, ratingCount: 6780,
-      categoryId: catElectronics.id,
-      images: [
-        'https://picsum.photos/seed/realme1/600/600',
-        'https://picsum.photos/seed/realme2/600/600'
-      ]
-    }
+  // Helper for image URLs
+  const img = (seed) => `https://picsum.photos/seed/${seed}/400/400`;
+
+  // ─── ELECTRONICS (30 products) ───────────────────────────────────────
+  const electronics = [
+    { title: 'Apple iPhone 15 Pro (256GB) - Natural Titanium', description: 'iPhone 15 Pro with A17 Pro chip, 48MP camera system, titanium design, Action button, USB-C.', features: JSON.stringify(['A17 Pro chip','48MP Main camera','Titanium design','USB-C','Action button']), tags: 'iphone,apple,phone,mobile,smartphone,5g,camera,titanium,ios', brand: 'Apple', price: 134900, stock: 50, ratings: 4.8, ratingCount: 34500 },
+    { title: 'Samsung Galaxy S24 Ultra 5G (12GB/256GB)', description: 'Galaxy AI powered flagship with 200MP camera, S Pen, Snapdragon 8 Gen 3, 6.8" QHD+ AMOLED.', features: JSON.stringify(['200MP camera','Galaxy AI','S Pen built-in','Snapdragon 8 Gen 3','5000mAh battery']), tags: 'samsung,galaxy,phone,mobile,5g,android,camera,ai', brand: 'Samsung', price: 129999, stock: 40, ratings: 4.7, ratingCount: 22100 },
+    { title: 'OnePlus 12 5G (16GB/256GB) - Silky Black', description: 'Flagship killer with Snapdragon 8 Gen 3, 50MP Hasselblad camera, 100W SUPERVOOC, 2K ProXDR display.', features: JSON.stringify(['Snapdragon 8 Gen 3','Hasselblad camera','100W charging','2K display','OxygenOS 14']), tags: 'oneplus,phone,mobile,5g,android,fast charging,hasselblad', brand: 'OnePlus', price: 64999, stock: 60, ratings: 4.5, ratingCount: 15600 },
+    { title: 'Realme Narzo 60 5G (6GB/128GB)', description: '5G smartphone with 6.4" AMOLED, Dimensity 6100+, 50MP AI camera, 5000mAh, 33W fast charge.', features: JSON.stringify(['6.4" AMOLED','Dimensity 6100+','50MP camera','5000mAh','33W charging']), tags: 'realme,phone,budget,5g,android,mobile', brand: 'Realme', price: 14999, stock: 100, ratings: 4.3, ratingCount: 8900 },
+    { title: 'Redmi Note 13 Pro+ 5G (8GB/256GB)', description: '200MP OIS camera, 120W HyperCharge, 6.67" AMOLED 120Hz, Dimensity 7200 Ultra.', features: JSON.stringify(['200MP OIS camera','120W HyperCharge','6.67" AMOLED 120Hz','Dimensity 7200 Ultra','IP68']), tags: 'redmi,xiaomi,phone,mobile,5g,android,camera,budget', brand: 'Redmi', price: 29999, stock: 80, ratings: 4.4, ratingCount: 19200 },
+    { title: 'Apple MacBook Air M2 (8GB/256GB)', description: '13.6" Liquid Retina display, Apple M2 chip, 18-hour battery, MagSafe charging, fanless design.', features: JSON.stringify(['Apple M2 chip','13.6" Liquid Retina','18hr battery','8GB unified memory','MagSafe']), tags: 'macbook,apple,laptop,m2,ultrabook,thin,lightweight', brand: 'Apple', price: 99900, stock: 30, ratings: 4.8, ratingCount: 12400 },
+    { title: 'HP Pavilion 15 (i5/16GB/512GB SSD)', description: '15.6" FHD IPS, Intel i5-1335U, 16GB DDR4, 512GB SSD, Windows 11, backlit keyboard.', features: JSON.stringify(['Intel i5-1335U','16GB DDR4','512GB SSD','15.6" FHD IPS','Windows 11']), tags: 'hp,laptop,windows,i5,pavilion,student,office', brand: 'HP', price: 54990, stock: 45, ratings: 4.3, ratingCount: 6700 },
+    { title: 'Lenovo IdeaPad Slim 3 (Ryzen 5/8GB/512GB)', description: '15.6" FHD, AMD Ryzen 5 7530U, 8GB RAM, 512GB SSD, thin & light design.', features: JSON.stringify(['AMD Ryzen 5 7530U','8GB RAM','512GB SSD','15.6" FHD','Thin & Light']), tags: 'lenovo,laptop,amd,ryzen,ideapad,student,budget laptop', brand: 'Lenovo', price: 42990, stock: 55, ratings: 4.2, ratingCount: 5400 },
+    { title: 'Sony WH-1000XM5 Wireless Headphones', description: 'Industry-leading ANC, 30-hour battery, multipoint, speak-to-chat, Hi-Res Audio.', features: JSON.stringify(['Industry-leading ANC','30hr battery','Multipoint','Hi-Res Audio','Touch controls']), tags: 'headphones,sony,wireless,bluetooth,anc,noise cancelling,audio', brand: 'Sony', price: 24990, stock: 35, ratings: 4.7, ratingCount: 8900 },
+    { title: 'boAt Rockerz 450 Bluetooth Headphones', description: '40mm drivers, 15hr battery, padded cushions, built-in mic. Budget wireless headphones.', features: JSON.stringify(['40mm drivers','15hr playback','Built-in mic','Dual connectivity','Lightweight']), tags: 'boat,headphones,bluetooth,wireless,budget,audio,gym', brand: 'boAt', price: 1299, stock: 200, ratings: 4.1, ratingCount: 45600 },
+    { title: 'Apple AirPods Pro (2nd Generation) with USB-C', description: 'Active Noise Cancellation, Adaptive Transparency, Personalised Spatial Audio, USB-C charging.', features: JSON.stringify(['Active Noise Cancellation','Adaptive Transparency','Spatial Audio','USB-C','6hr battery']), tags: 'airpods,apple,earbuds,wireless,anc,bluetooth,tws', brand: 'Apple', price: 24900, stock: 40, ratings: 4.7, ratingCount: 18700 },
+    { title: 'Samsung Galaxy Watch 6 Classic (47mm)', description: 'Rotating bezel, AMOLED display, BioActive Sensor, GPS, Wear OS by Google.', features: JSON.stringify(['Rotating bezel','AMOLED display','BioActive Sensor','GPS','Wear OS']), tags: 'smartwatch,samsung,galaxy,watch,fitness,health,gps', brand: 'Samsung', price: 34999, stock: 25, ratings: 4.5, ratingCount: 3200 },
+    { title: 'Fire TV Stick 4K Max (2nd Gen)', description: 'Stream in 4K with Wi-Fi 6E, Alexa Voice Remote, Dolby Vision & Atmos.', features: JSON.stringify(['4K Ultra HD','Wi-Fi 6E','Dolby Vision','Dolby Atmos','Alexa Remote']), tags: 'fire tv,amazon,streaming,4k,alexa,entertainment', brand: 'Amazon', price: 6499, stock: 150, ratings: 4.4, ratingCount: 28900 },
+    { title: 'Amazon Echo Dot (5th Gen) Smart Speaker', description: 'Compact smart speaker with Alexa. Improved audio, smart home control, routines.', features: JSON.stringify(['Alexa built-in','Improved bass','Smart home hub','Music streaming','Timers & alarms']), tags: 'echo,alexa,smart speaker,amazon,bluetooth,voice assistant', brand: 'Amazon', price: 3499, stock: 100, ratings: 4.5, ratingCount: 42100 },
+    { title: 'JBL Charge 5 Portable Bluetooth Speaker', description: 'Powerful JBL Original Pro Sound, IP67 waterproof, 20-hour playtime, built-in powerbank.', features: JSON.stringify(['JBL Original Pro Sound','IP67','20hr playtime','Built-in powerbank','Dual bass radiators']), tags: 'jbl,speaker,bluetooth,portable,waterproof,outdoor,party', brand: 'JBL', price: 14999, stock: 40, ratings: 4.6, ratingCount: 11200 },
+    { title: 'Canon EOS R50 Mirrorless Camera (Body Only)', description: '24.2MP APS-C CMOS, 4K video, 15fps continuous shooting, Eye Detection AF.', features: JSON.stringify(['24.2MP APS-C','4K video','Eye Detection AF','15fps shooting','Wi-Fi/Bluetooth']), tags: 'camera,canon,mirrorless,photography,4k,dslr', brand: 'Canon', price: 65990, stock: 15, ratings: 4.6, ratingCount: 1800 },
+    { title: 'Logitech MX Master 3S Wireless Mouse', description: 'Precision 8K DPI sensor, quiet clicks, MagSpeed scroll, USB-C, works on glass.', features: JSON.stringify(['8K DPI sensor','Quiet clicks','MagSpeed scroll','USB-C charging','Multi-device']), tags: 'mouse,logitech,wireless,ergonomic,office,productivity', brand: 'Logitech', price: 8995, stock: 50, ratings: 4.7, ratingCount: 7600 },
+    { title: 'Samsung 980 PRO 1TB NVMe SSD', description: 'PCIe Gen 4.0 x4, up to 7000MB/s read speed. For gaming PCs and creative workstations.', features: JSON.stringify(['1TB capacity','7000MB/s read','PCIe Gen 4.0','NVMe','5-year warranty']), tags: 'ssd,samsung,storage,nvme,pcie,gaming,computer', brand: 'Samsung', price: 7999, stock: 60, ratings: 4.8, ratingCount: 14300 },
+    { title: 'Anker 737 Power Bank (24000mAh, 140W)', description: '140W bidirectional charging, smart display, PowerIQ 3.0, charges laptops.', features: JSON.stringify(['24000mAh','140W output','Smart display','USB-C + USB-A','Laptop charging']), tags: 'power bank,anker,charger,portable,usb-c,travel,battery', brand: 'Anker', price: 8999, stock: 45, ratings: 4.5, ratingCount: 5400 },
+    { title: 'Apple iPad 10th Gen (64GB, Wi-Fi)', description: '10.9" Liquid Retina, A14 Bionic chip, 12MP cameras, USB-C, Touch ID.', features: JSON.stringify(['10.9" Liquid Retina','A14 Bionic','12MP cameras','USB-C','Touch ID']), tags: 'ipad,apple,tablet,drawing,student,a14,portable', brand: 'Apple', price: 33900, stock: 35, ratings: 4.6, ratingCount: 9800 },
+    { title: 'Dell UltraSharp U2723QE 27" 4K Monitor', description: 'IPS Black tech, 4K UHD, USB-C hub, 98% DCI-P3, HDR 400, factory calibrated.', features: JSON.stringify(['27" 4K UHD','IPS Black','USB-C hub','98% DCI-P3','HDR 400']), tags: 'monitor,dell,4k,ultrasharp,usb-c,office,design', brand: 'Dell', price: 52990, stock: 20, ratings: 4.7, ratingCount: 3100 },
+    { title: 'Noise ColorFit Pro 5 Smartwatch', description: '1.85" AMOLED, Bluetooth calling, 100+ sports modes, SpO2, heart rate, 7-day battery.', features: JSON.stringify(['1.85" AMOLED','Bluetooth calling','100+ sport modes','SpO2','7-day battery']), tags: 'smartwatch,noise,fitness,health,budget,calling watch', brand: 'Noise', price: 2999, stock: 120, ratings: 4.2, ratingCount: 22100 },
+    { title: 'Zebronics Zeb-Transformer Gaming Keyboard', description: 'RGB mechanical feel, anti-ghosting, braided cable, multimedia keys, durable build.', features: JSON.stringify(['RGB backlit','Anti-ghosting','Braided cable','Multimedia keys','Plug & play']), tags: 'keyboard,gaming,rgb,zebronics,mechanical,budget,computer', brand: 'Zebronics', price: 799, stock: 180, ratings: 4.0, ratingCount: 18900 },
+    { title: 'TP-Link Archer AX73 Wi-Fi 6 Router', description: 'AX5400 dual-band, 6 antennas, OFDMA, MU-MIMO, USB 3.0, HomeShield security.', features: JSON.stringify(['AX5400 dual-band','Wi-Fi 6','6 antennas','MU-MIMO','USB 3.0']), tags: 'router,tp-link,wifi 6,networking,internet,home network', brand: 'TP-Link', price: 7999, stock: 30, ratings: 4.4, ratingCount: 6700 },
+    { title: 'Kindle Paperwhite (16GB) 2024', description: '6.8" glare-free display, adjustable warm light, up to 10 weeks battery, IPX8.', features: JSON.stringify(['6.8" 300ppi display','Adjustable warm light','10 weeks battery','IPX8','16GB storage']), tags: 'kindle,amazon,ereader,reading,books,paperwhite,portable', brand: 'Amazon', price: 14999, stock: 55, ratings: 4.7, ratingCount: 31200 },
+    { title: 'Mi Power Bank 3i 20000mAh', description: 'Dual USB output, 18W fast charging, input via Micro-USB and Type-C, LED indicators.', features: JSON.stringify(['20000mAh','18W fast charging','Dual USB out','Type-C input','LED indicator']), tags: 'power bank,xiaomi,mi,charger,portable,budget,battery', brand: 'Xiaomi', price: 1399, stock: 200, ratings: 4.3, ratingCount: 56700 },
+    { title: 'Boat Airdopes 141 TWS Earbuds', description: '42H total playtime, low latency, ENx noise cancellation, IPX4, IWP technology.', features: JSON.stringify(['42H playtime','ENx noise cancel','IPX4','Low latency','IWP tech']), tags: 'earbuds,boat,tws,bluetooth,wireless,budget,music', brand: 'boAt', price: 999, stock: 300, ratings: 4.1, ratingCount: 89200 },
+    { title: 'Havells Instanio Prime 3L Instant Water Heater', description: '3L capacity, heavy duty anode rod, colour changing LED indicators, ISI certified.', features: JSON.stringify(['3L capacity','Anode rod','LED indicators','ISI certified','Rust-proof body']), tags: 'water heater,geyser,havells,bathroom,winter,appliance', brand: 'Havells', price: 3899, stock: 40, ratings: 4.3, ratingCount: 12100 },
+    { title: 'Crompton Energion HS 1200mm Ceiling Fan', description: 'BLDC motor, remote control, energy saving (35W), anti-dust, 5-star rated.', features: JSON.stringify(['BLDC motor','Remote control','35W power','Anti-dust','5-star rated']), tags: 'fan,ceiling fan,crompton,bldc,energy saving,home,appliance', brand: 'Crompton', price: 3499, stock: 50, ratings: 4.4, ratingCount: 8900 },
+    { title: 'Sony PlayStation 5 Slim (Digital Edition)', description: 'Next-gen gaming console, custom SSD, 4K gaming, DualSense controller, PS VR2 compatible.', features: JSON.stringify(['Custom SSD','4K gaming','DualSense controller','Ray tracing','PS VR2 ready']), tags: 'ps5,playstation,sony,gaming,console,4k gaming', brand: 'Sony', price: 39990, stock: 20, ratings: 4.8, ratingCount: 7600 },
   ];
 
-  for (const prod of products) {
-    const { images, ...prodData } = prod;
-    const created = await prisma.product.create({ data: prodData });
-    for (const url of images) {
-      await prisma.productImage.create({ data: { productId: created.id, url } });
-    }
+  // ─── FASHION (25 products) ───────────────────────────────────────────
+  const fashion = [
+    { title: "Allen Solly Men's Slim Fit Formal Shirt", description: 'Premium cotton slim-fit formal shirt. Perfect for offices and formal occasions. Wrinkle resistant.', features: JSON.stringify(['100% cotton','Slim fit','Wrinkle resistant','Machine washable']), tags: 'shirt,formal,mens,cotton,office,slim fit,allen solly', brand: 'Allen Solly', price: 1299, stock: 200, ratings: 4.2, ratingCount: 18500 },
+    { title: "Levi's Men's 511 Slim Fit Jeans - Dark Blue", description: 'Classic 511 slim fit jeans in dark indigo wash. Stretch denim for comfort.', features: JSON.stringify(['Slim fit','Stretch denim','5-pocket design','Button fly','Machine washable']), tags: 'jeans,levis,denim,mens,slim fit,casual,fashion', brand: "Levi's", price: 2499, stock: 150, ratings: 4.4, ratingCount: 23100 },
+    { title: 'Nike Air Max 270 Running Shoes - Men', description: 'Max Air 270 unit heel, breathable mesh upper, foam midsole, rubber outsole.', features: JSON.stringify(['Max Air 270 unit','Mesh upper','Foam midsole','Rubber outsole','Pull tab']), tags: 'shoes,nike,running,sports,sneakers,mens,air max', brand: 'Nike', price: 8995, stock: 80, ratings: 4.5, ratingCount: 14200 },
+    { title: "Adidas Men's Ultraboost 22 Running Shoes", description: 'BOOST midsole, Primeknit+ upper, Continental rubber outsole. Premium running shoe.', features: JSON.stringify(['BOOST midsole','Primeknit+ upper','Continental rubber','Responsive cushioning']), tags: 'shoes,adidas,running,ultraboost,sports,mens,premium', brand: 'Adidas', price: 12999, stock: 50, ratings: 4.6, ratingCount: 9800 },
+    { title: "Puma Men's T7 Iconic Track Jacket", description: 'Classic T7 design with stripe detail. Full-zip, ribbed cuffs and hem. Cotton blend.', features: JSON.stringify(['Classic T7 design','Full zip','Ribbed cuffs','Cotton blend','Side pockets']), tags: 'jacket,puma,track jacket,mens,sportswear,casual', brand: 'Puma', price: 3499, stock: 70, ratings: 4.3, ratingCount: 5600 },
+    { title: 'Raymond Men\'s Pure Wool Blazer - Navy', description: 'Single breasted, notch lapel, pure wool blazer. Ideal for business and formal wear.', features: JSON.stringify(['Pure wool','Single breasted','Notch lapel','Inner pockets','Dry clean only']), tags: 'blazer,raymond,formal,mens,wool,business,suit', brand: 'Raymond', price: 8999, stock: 25, ratings: 4.5, ratingCount: 3200 },
+    { title: "Women's Anarkali Kurti - Ethnic Blue", description: 'Beautiful Anarkali style kurti with golden embroidery. Rayon fabric, flared design.', features: JSON.stringify(['Rayon fabric','Anarkali style','Golden embroidery','Flared design','3/4 sleeves']), tags: 'kurti,anarkali,ethnic,womens,indian,festive,fashion', brand: 'Biba', price: 1599, stock: 120, ratings: 4.3, ratingCount: 12400 },
+    { title: "Fastrack Reflex Vox 2.0 Smartwatch", description: 'Bluetooth calling, 1.8" UltraVU display, 100+ watch faces, IP68, SingleSync BT.', features: JSON.stringify(['BT calling','1.8" display','100+ watch faces','IP68','7-day battery']), tags: 'smartwatch,fastrack,watch,calling,fitness,budget', brand: 'Fastrack', price: 2495, stock: 80, ratings: 4.1, ratingCount: 15600 },
+    { title: 'Ray-Ban Aviator Classic Sunglasses (RB3025)', description: 'Gold frame, green classic G-15 lens. The iconic aviator silhouette since 1937.', features: JSON.stringify(['G-15 lens','Gold frame','UV400 protection','58mm lens','Iconic design']), tags: 'sunglasses,rayban,aviator,mens,womens,uv protection,classic', brand: 'Ray-Ban', price: 7990, stock: 35, ratings: 4.7, ratingCount: 8900 },
+    { title: "Wildcraft Unisex 45L Rucksack Backpack", description: 'Durable 45L rucksack with rain cover, padded straps, multiple compartments. Trek ready.', features: JSON.stringify(['45L capacity','Rain cover','Padded straps','Multiple compartments','Durable nylon']), tags: 'backpack,wildcraft,rucksack,trekking,travel,unisex,outdoor', brand: 'Wildcraft', price: 2999, stock: 60, ratings: 4.3, ratingCount: 7800 },
+    { title: 'American Tourister Polycarbonate 68cm Luggage', description: 'Medium check-in luggage with TSA lock, 4 spinner wheels, expandable, scratch resistant.', features: JSON.stringify(['68cm/24"','Polycarbonate','TSA lock','4 spinner wheels','Expandable']), tags: 'luggage,suitcase,travel,american tourister,trolley,check-in', brand: 'American Tourister', price: 4499, stock: 40, ratings: 4.4, ratingCount: 18900 },
+    { title: "Women's Cotton Saree - Kanjeevaram Silk Style", description: 'Elegant Kanjeevaram inspired cotton silk saree with golden zari border. Festival ready.', features: JSON.stringify(['Cotton silk blend','Zari border','6.3m with blouse piece','Traditional design']), tags: 'saree,kanjeevaram,silk,womens,ethnic,traditional,festive', brand: 'SareeShop', price: 2999, stock: 90, ratings: 4.4, ratingCount: 6700 },
+    { title: "U.S. Polo Assn. Men's Polo T-Shirt - Red", description: 'Classic polo t-shirt with embroidered logo. 100% cotton pique, regular fit.', features: JSON.stringify(['100% cotton pique','Regular fit','Embroidered logo','Button placket','Side vents']), tags: 'tshirt,polo,mens,uspa,casual,cotton,summer', brand: 'U.S. Polo', price: 999, stock: 180, ratings: 4.2, ratingCount: 28900 },
+    { title: 'Titan Karishma Analog Watch for Men', description: 'Classic analog watch with stainless steel case, leather strap, quartz movement.', features: JSON.stringify(['Quartz movement','Leather strap','Stainless steel case','Water resistant','Mineral glass']), tags: 'watch,titan,analog,mens,classic,leather,accessories', brand: 'Titan', price: 2495, stock: 55, ratings: 4.3, ratingCount: 9800 },
+    { title: "Women's Ethnic Jhumka Earrings - Gold Plated", description: 'Traditional jhumka earrings with meenakari work. Gold-plated brass, lightweight.', features: JSON.stringify(['Gold-plated brass','Meenakari work','Lightweight','Push back closure']), tags: 'earrings,jhumka,gold,womens,ethnic,jewellery,traditional', brand: 'Zaveri Pearls', price: 349, stock: 200, ratings: 4.1, ratingCount: 14500 },
+    { title: "Woodland Men's Leather Casual Shoes - Brown", description: 'Genuine leather upper, rubber sole, cushioned insole. Rugged outdoor casual shoes.', features: JSON.stringify(['Genuine leather','Rubber sole','Cushioned insole','Lace-up','Durable']), tags: 'shoes,woodland,leather,mens,casual,outdoor,brown', brand: 'Woodland', price: 3495, stock: 65, ratings: 4.4, ratingCount: 21300 },
+    { title: "Peter England Men's Chino Trousers - Khaki", description: 'Slim fit chino trousers in khaki. Cotton stretch blend, flat front, versatile style.', features: JSON.stringify(['Cotton stretch','Slim fit','Flat front','Machine washable','Versatile']), tags: 'trousers,chino,mens,peter england,casual,office,khaki', brand: 'Peter England', price: 1499, stock: 100, ratings: 4.2, ratingCount: 8700 },
+    { title: "Women's Printed Palazzo Pants - Multicolor", description: 'Comfortable rayon palazzo pants with vibrant print. Elastic waist, free-flowing.', features: JSON.stringify(['Rayon fabric','Elastic waist','Free-flowing','Vibrant print','Machine washable']), tags: 'palazzo,pants,womens,rayon,casual,comfortable,ethnic', brand: 'Aurelia', price: 699, stock: 150, ratings: 4.1, ratingCount: 11200 },
+    { title: "Lavie Women's Satchel Handbag - Tan", description: 'Stylish satchel with multiple compartments, zip closure, adjustable strap, PU leather.', features: JSON.stringify(['PU leather','Multiple compartments','Zip closure','Adjustable strap','Tan color']), tags: 'handbag,satchel,womens,lavie,purse,bag,fashion', brand: 'Lavie', price: 1899, stock: 45, ratings: 4.3, ratingCount: 7600 },
+    { title: "Crocs Unisex Classic Clogs - Black", description: 'Iconic Croslite foam clogs. Lightweight, comfortable, ventilation ports, pivoting heel strap.', features: JSON.stringify(['Croslite foam','Lightweight','Ventilation ports','Heel strap','Easy clean']), tags: 'crocs,clogs,unisex,casual,comfortable,footwear,summer', brand: 'Crocs', price: 2495, stock: 120, ratings: 4.5, ratingCount: 34500 },
+    { title: "Van Heusen Men's Regular Fit Polo - White", description: 'Premium cotton polo in crisp white. Regular fit, ribbed collar and cuffs.', features: JSON.stringify(['Premium cotton','Regular fit','Ribbed collar','Button placket','Classic white']), tags: 'polo,tshirt,mens,van heusen,white,office,casual', brand: 'Van Heusen', price: 1299, stock: 90, ratings: 4.2, ratingCount: 6800 },
+    { title: "Women's Sports Bra - High Support Black", description: 'High-impact sports bra with racerback design. Moisture-wicking, padded, mesh panels.', features: JSON.stringify(['High support','Racerback','Moisture-wicking','Padded','Mesh panels']), tags: 'sports bra,womens,gym,fitness,activewear,black', brand: 'Nike', price: 1995, stock: 80, ratings: 4.4, ratingCount: 5600 },
+    { title: "WROGN Men's Printed Casual Shirt - Navy", description: 'Trendy printed casual shirt in navy. Slim fit, cotton, spread collar, full sleeves.', features: JSON.stringify(['Cotton','Slim fit','Printed design','Spread collar','Full sleeves']), tags: 'shirt,casual,mens,printed,wrogn,slim fit,navy', brand: 'WROGN', price: 899, stock: 130, ratings: 4.1, ratingCount: 9200 },
+    { title: "Campus Sutra Women's Hoodie - Grey Melange", description: 'Cozy fleece hoodie with kangaroo pocket. Regular fit, drawstring hood, soft interior.', features: JSON.stringify(['Fleece fabric','Kangaroo pocket','Drawstring hood','Regular fit','Soft interior']), tags: 'hoodie,womens,campus sutra,sweatshirt,winter,casual,grey', brand: 'Campus Sutra', price: 1199, stock: 75, ratings: 4.2, ratingCount: 7800 },
+    { title: "Reebok Classic Leather Sneakers - White", description: 'Iconic classic leather sneakers in white. Soft garment leather upper, EVA midsole.', features: JSON.stringify(['Garment leather','EVA midsole','High-abrasion rubber outsole','Classic design']), tags: 'sneakers,reebok,leather,white,classic,unisex,casual', brand: 'Reebok', price: 4999, stock: 55, ratings: 4.4, ratingCount: 11600 },
+  ];
+
+  // ─── BOOKS (20 products) ─────────────────────────────────────────────
+  const books = [
+    { title: 'Atomic Habits by James Clear', description: 'A proven framework for improving every day. Master tiny behaviors for remarkable results.', features: JSON.stringify(['320 pages','English','Penguin','Self-Help Bestseller','15M+ copies sold']), tags: 'book,habits,self help,bestseller,james clear,productivity', brand: 'Penguin', price: 399, stock: 80, ratings: 4.9, ratingCount: 89200 },
+    { title: 'The Psychology of Money by Morgan Housel', description: 'Timeless lessons on wealth, greed, and happiness. 20 short stories about the strange ways people think about money.', features: JSON.stringify(['256 pages','English','Jaico Publishing','Finance','2M+ copies']), tags: 'book,finance,money,psychology,investing,bestseller', brand: 'Jaico', price: 299, stock: 100, ratings: 4.7, ratingCount: 67800 },
+    { title: 'The Alchemist by Paulo Coelho', description: "Santiago's journey to discover his Personal Legend. A mystical fable of self-discovery.", features: JSON.stringify(['208 pages','English','HarperCollins','80+ languages','65M copies sold']), tags: 'book,novel,fiction,bestseller,paulo coelho,spiritual', brand: 'HarperCollins', price: 299, stock: 120, ratings: 4.7, ratingCount: 54300 },
+    { title: 'Rich Dad Poor Dad by Robert Kiyosaki', description: 'What the rich teach their kids about money that the poor and middle class do not.', features: JSON.stringify(['336 pages','English','Plata Publishing','Personal Finance','32M copies sold']), tags: 'book,finance,rich,money,investing,financial literacy', brand: 'Plata Publishing', price: 349, stock: 90, ratings: 4.6, ratingCount: 78900 },
+    { title: 'Ikigai: The Japanese Secret to a Long and Happy Life', description: 'Discover your ikigai — the intersection of what you love, what you are good at, and what the world needs.', features: JSON.stringify(['208 pages','English','Penguin','Self-Help','Lifestyle']), tags: 'book,ikigai,japanese,self help,happiness,longevity', brand: 'Penguin', price: 249, stock: 110, ratings: 4.5, ratingCount: 45600 },
+    { title: 'The Subtle Art of Not Giving a F*ck by Mark Manson', description: 'A counterintuitive approach to living a good life. Brutally honest and refreshingly direct.', features: JSON.stringify(['224 pages','English','HarperOne','Self-Help','Bestseller']), tags: 'book,self help,mindset,mark manson,motivation,bestseller', brand: 'HarperOne', price: 350, stock: 85, ratings: 4.4, ratingCount: 56700 },
+    { title: 'Sapiens: A Brief History of Humankind by Yuval Noah Harari', description: '100,000 years of human history in one sweeping narrative. From the Stone Age to the Silicon Age.', features: JSON.stringify(['498 pages','English','Vintage','Non-Fiction','20M+ copies']), tags: 'book,sapiens,history,science,non fiction,harari', brand: 'Vintage', price: 449, stock: 60, ratings: 4.7, ratingCount: 34500 },
+    { title: "Harry Potter and the Philosopher's Stone - J.K. Rowling", description: 'The first book in the magical Harry Potter series. Join Harry as he discovers the wizarding world.', features: JSON.stringify(['352 pages','English','Bloomsbury','Fantasy','500M+ series copies']), tags: 'book,harry potter,fantasy,fiction,magic,kids,jk rowling', brand: 'Bloomsbury', price: 350, stock: 100, ratings: 4.8, ratingCount: 123400 },
+    { title: "You Can Win by Shiv Khera", description: 'A step-by-step tool for top achievers. Qualities and attitude needed to be a winner.', features: JSON.stringify(['288 pages','English','Bloomsbury','Self-Help','Motivation']), tags: 'book,motivation,self help,shiv khera,success,winner', brand: 'Bloomsbury', price: 199, stock: 95, ratings: 4.3, ratingCount: 28900 },
+    { title: 'Think and Grow Rich by Napoleon Hill', description: 'The classic guide to success. 13 principles of personal achievement from 500 millionaires.', features: JSON.stringify(['320 pages','English','Fingerprint','Classic','100M+ copies']), tags: 'book,success,wealth,classic,napoleon hill,mindset', brand: 'Fingerprint', price: 199, stock: 80, ratings: 4.5, ratingCount: 45600 },
+    { title: 'The Power of Your Subconscious Mind by Joseph Murphy', description: 'Tap into the power of your subconscious mind for success, health, wealth, and love.', features: JSON.stringify(['312 pages','English','Penguin','Self-Help','Psychology']), tags: 'book,mind,subconscious,self help,psychology,classic', brand: 'Penguin', price: 199, stock: 100, ratings: 4.4, ratingCount: 34500 },
+    { title: 'Deep Work by Cal Newport', description: 'Rules for focused success in a distracted world. How to produce at your peak performances.', features: JSON.stringify(['296 pages','English','Piatkus','Productivity','Focus']), tags: 'book,productivity,focus,deep work,cal newport,career', brand: 'Piatkus', price: 399, stock: 55, ratings: 4.6, ratingCount: 18900 },
+    { title: 'Wings of Fire by APJ Abdul Kalam', description: 'Autobiography of the missile man of India. From humble beginnings to President.', features: JSON.stringify(['224 pages','English','Universities Press','Biography','Inspirational']), tags: 'book,biography,kalam,india,inspirational,autobiography', brand: 'Universities Press', price: 199, stock: 120, ratings: 4.7, ratingCount: 67800 },
+    { title: 'The 5 AM Club by Robin Sharma', description: 'Own your morning, elevate your life. A formula for maximizing productivity using the early morning routine.', features: JSON.stringify(['336 pages','English','HarperCollins','Self-Help','Morning routine']), tags: 'book,morning,routine,robin sharma,productivity,habit', brand: 'HarperCollins', price: 299, stock: 70, ratings: 4.3, ratingCount: 23400 },
+    { title: 'The Monk Who Sold His Ferrari by Robin Sharma', description: 'A fable about fulfilling your dreams and reaching your destiny. Spiritual self-help.', features: JSON.stringify(['198 pages','English','Jaico','Self-Help','Spiritual']), tags: 'book,monk,ferrari,self help,robin sharma,spiritual', brand: 'Jaico', price: 199, stock: 90, ratings: 4.4, ratingCount: 34500 },
+    { title: 'Gone Girl by Gillian Flynn', description: 'A sharp, dark twisty masterpiece about a marriage gone terribly wrong. Psychological thriller.', features: JSON.stringify(['432 pages','English','Crown','Thriller','Mystery']), tags: 'book,thriller,mystery,fiction,gone girl,suspense', brand: 'Crown', price: 399, stock: 45, ratings: 4.5, ratingCount: 28900 },
+    { title: 'Python Crash Course by Eric Matthes (3rd Ed)', description: 'Best-selling intro to Python programming. Hands-on, project-based approach.', features: JSON.stringify(['560 pages','English','No Starch Press','Programming','3rd Edition']), tags: 'book,python,programming,coding,tech,computer science,learning', brand: 'No Starch Press', price: 699, stock: 50, ratings: 4.6, ratingCount: 15600 },
+    { title: 'A Thousand Splendid Suns by Khaled Hosseini', description: 'A heartbreaking story of two women in Afghanistan. From the author of The Kite Runner.', features: JSON.stringify(['419 pages','English','Riverhead','Fiction','Literary']), tags: 'book,fiction,literary,hosseini,afghanistan,women,novel', brand: 'Riverhead', price: 350, stock: 55, ratings: 4.6, ratingCount: 23400 },
+    { title: 'The Art of War by Sun Tzu (Deluxe Edition)', description: 'Ancient Chinese military treatise. Timeless lessons on strategy, leadership, and conflict.', features: JSON.stringify(['224 pages','English','Fingerprint','Classic','Strategy']), tags: 'book,strategy,classic,sun tzu,leadership,military,philosophy', brand: 'Fingerprint', price: 249, stock: 65, ratings: 4.5, ratingCount: 18900 },
+    { title: 'Diary of a Wimpy Kid by Jeff Kinney', description: 'The hilarious adventures of Greg Heffley navigating middle school life. Illustrated novel for kids.', features: JSON.stringify(['224 pages','English','Amulet Books','Kids','Humour']), tags: 'book,kids,funny,diary,wimpy kid,children,illustrated', brand: 'Amulet Books', price: 299, stock: 100, ratings: 4.6, ratingCount: 45600 },
+  ];
+
+  // ─── HOME & KITCHEN (20 products) ────────────────────────────────────
+  const homeKitchen = [
+    { title: 'Philips Air Fryer HD9252/90 (4.1L)', description: 'Cook with up to 90% less fat. Rapid Air Technology, 7 presets, dishwasher safe.', features: JSON.stringify(['4.1L capacity','90% less fat','7 presets','Rapid Air','Dishwasher safe']), tags: 'air fryer,philips,kitchen,cooking,healthy,appliance', brand: 'Philips', price: 7999, stock: 45, ratings: 4.3, ratingCount: 18900 },
+    { title: 'Prestige Iris 750W Mixer Grinder (3 Jars)', description: 'Powerful 750W motor, 3 stainless steel jars, overload protection, 2-year warranty.', features: JSON.stringify(['750W motor','3 SS jars','Overload protection','2-year warranty']), tags: 'mixer grinder,prestige,kitchen,appliance,grinding,blending', brand: 'Prestige', price: 2899, stock: 60, ratings: 4.2, ratingCount: 23400 },
+    { title: 'Milton Thermosteel Flask 1L - Silver', description: 'Keeps beverages hot/cold 24 hours. Stainless steel, leak-proof, BPA free.', features: JSON.stringify(['1000ml','Hot/Cold 24hr','Stainless steel','Leak-proof','BPA free']), tags: 'flask,thermos,milton,water bottle,steel,insulated', brand: 'Milton', price: 649, stock: 200, ratings: 4.5, ratingCount: 34500 },
+    { title: 'Pigeon by Stovekraft 12L OTG (Oven Toaster Grill)', description: '12L capacity, 3 heating modes, auto-shutoff timer, includes baking tray and wire rack.', features: JSON.stringify(['12L capacity','3 heating modes','Auto-shutoff','Baking tray included','Compact']), tags: 'otg,oven,toaster,pigeon,baking,kitchen,appliance', brand: 'Pigeon', price: 2199, stock: 35, ratings: 4.1, ratingCount: 12400 },
+    { title: 'Wipro 9W LED Bulb (Pack of 4) - Cool Day Light', description: '9W LED bulbs, 6500K cool daylight, 900 lumens, 25000 hours life, energy saving.', features: JSON.stringify(['9W power','6500K','900 lumens','25000hr life','Pack of 4']), tags: 'led bulb,wipro,lighting,home,energy saving,pack', brand: 'Wipro', price: 399, stock: 300, ratings: 4.3, ratingCount: 45600 },
+    { title: 'Amazon Basics Microfiber Bed Sheet Set (Queen)', description: 'Super soft microfiber, wrinkle resistant, deep pocket fitted sheet, 4-piece set.', features: JSON.stringify(['Microfiber','Queen size','Deep pocket','Wrinkle resistant','4-piece set']), tags: 'bedsheet,amazon basics,bedroom,home,microfiber,queen', brand: 'Amazon Basics', price: 1299, stock: 80, ratings: 4.2, ratingCount: 28900 },
+    { title: 'Borosil 5L Glass Casserole with Lid', description: 'Borosilicate glass, oven & microwave safe, thermal shock resistant, see-through lid.', features: JSON.stringify(['5L capacity','Borosilicate glass','Oven safe','Microwave safe','See-through lid']), tags: 'casserole,borosil,glass,kitchen,cookware,baking,serving', brand: 'Borosil', price: 1499, stock: 40, ratings: 4.4, ratingCount: 5600 },
+    { title: 'Bajaj Majesty RX 11 Room Heater (2000W)', description: '2000W power, adjustable thermostat, ISI certified, safety tip-over switch, noiseless.', features: JSON.stringify(['2000W','Adjustable thermostat','ISI certified','Safety switch','Noiseless']), tags: 'room heater,bajaj,winter,home,appliance,heating', brand: 'Bajaj', price: 1899, stock: 50, ratings: 4.2, ratingCount: 9800 },
+    { title: 'Hindware Snowcrest 85L Desert Air Cooler', description: '85L tank, honeycomb pads, inverter compatible, castor wheels, humidity control.', features: JSON.stringify(['85L tank','Honeycomb pads','Inverter compatible','Castor wheels','3-speed']), tags: 'air cooler,hindware,desert cooler,summer,home,cooling', brand: 'Hindware', price: 8999, stock: 25, ratings: 4.1, ratingCount: 6700 },
+    { title: 'iRobot Roomba i3+ Robot Vacuum', description: 'Auto dirt disposal, smart navigation, 3-stage cleaning, works with Alexa, ideal for pets.', features: JSON.stringify(['Auto dispose','Smart navigation','3-stage cleaning','Alexa compatible','Pet-friendly']), tags: 'robot vacuum,irobot,roomba,cleaning,smart home,automated', brand: 'iRobot', price: 34990, stock: 15, ratings: 4.5, ratingCount: 4500 },
+    { title: 'Prestige Induction Cooktop PIC 20.0 (1200W)', description: '1200W power, anti-magnetic wall, Indian menu options, automatic voltage regulator.', features: JSON.stringify(['1200W','Anti-magnetic wall','Indian menu','Auto voltage regulator','Push buttons']), tags: 'induction,prestige,cooktop,kitchen,cooking,appliance', brand: 'Prestige', price: 1999, stock: 55, ratings: 4.3, ratingCount: 18900 },
+    { title: 'Solimo 100% Cotton Bath Towel Set (4 Pack)', description: 'Soft absorbent cotton towels. 500 GSM weight, quick drying, machine washable.', features: JSON.stringify(['100% cotton','500 GSM','Quick drying','Machine washable','Pack of 4']), tags: 'towel,bath towel,cotton,solimo,home,bathroom,pack', brand: 'Solimo', price: 899, stock: 120, ratings: 4.2, ratingCount: 23400 },
+    { title: 'Butterfly Smart 750W Mixer Grinder (4 Jars)', description: '750W, 4 jars including juice extractor, LED indicator, 2-year warranty.', features: JSON.stringify(['750W motor','4 jars','Juice extractor','LED indicator','2yr warranty']), tags: 'mixer grinder,butterfly,kitchen,appliance,juicer', brand: 'Butterfly', price: 2499, stock: 50, ratings: 4.1, ratingCount: 12400 },
+    { title: 'Cello Opalware Dazzle Dinner Set (35 pcs)', description: 'Opal glass dinner set. Microwave safe, dishwasher safe, chip resistant, BPA free.', features: JSON.stringify(['35 pieces','Opal glass','Microwave safe','Dishwasher safe','Chip resistant']), tags: 'dinner set,cello,opalware,kitchen,plates,crockery', brand: 'Cello', price: 1999, stock: 30, ratings: 4.3, ratingCount: 11200 },
+    { title: 'Kent Grand Plus 8L RO+UV+UF Water Purifier', description: '8L storage, RO+UV+UF+TDS control, mineral retention, wall-mountable, ISI certified.', features: JSON.stringify(['8L storage','RO+UV+UF','TDS control','Mineral retention','ISI certified']), tags: 'water purifier,kent,ro,kitchen,home,drinking water', brand: 'Kent', price: 15999, stock: 20, ratings: 4.4, ratingCount: 28900 },
+    { title: 'Bergner Argent SS Triply Kadhai with Lid (24cm)', description: 'Tri-ply stainless steel kadhai. Induction compatible, riveted handles, even heat.', features: JSON.stringify(['Tri-ply SS','24cm','Induction compatible','Riveted handles','Even heating']), tags: 'kadhai,bergner,triply,stainless steel,cookware,induction', brand: 'Bergner', price: 1999, stock: 40, ratings: 4.5, ratingCount: 5600 },
+    { title: 'Eureka Forbes Quick Clean DX Vacuum Cleaner', description: '1200W, reusable dust bag, blower function, multiple accessories, compact design.', features: JSON.stringify(['1200W','Reusable dust bag','Blower function','Accessories included','Compact']), tags: 'vacuum cleaner,eureka forbes,cleaning,home,appliance', brand: 'Eureka Forbes', price: 3999, stock: 35, ratings: 4.2, ratingCount: 14500 },
+    { title: "Godrej 236L Double Door Refrigerator (3 Star)", description: '236L capacity, 3-star energy rating, cool shower tech, toughened glass shelves.', features: JSON.stringify(['236L','3-star BEE','Cool Shower Tech','Toughened glass','Inverter compressor']), tags: 'refrigerator,fridge,godrej,home,appliance,storage', brand: 'Godrej', price: 22990, stock: 15, ratings: 4.3, ratingCount: 8900 },
+    { title: 'Havells Instanio Prime 3L Instant Water Heater', description: '3L capacity, heavy duty anode rod, colour-changing LED indicators, ISI certified.', features: JSON.stringify(['3L capacity','Anode rod','LED indicators','ISI certified','Rust-proof']), tags: 'geyser,water heater,havells,bathroom,winter,instant', brand: 'Havells', price: 3899, stock: 40, ratings: 4.3, ratingCount: 12100 },
+    { title: 'Scotch-Brite 2-in-1 Bucket Spin Mop Set (Green)', description: 'Magic mop with wringer bucket, 360° spin, microfiber refill, splash guard.', features: JSON.stringify(['360° spin','Wringer bucket','Microfiber head','Splash guard','Durable']), tags: 'mop,scotch-brite,cleaning,home,floor,bucket mop', brand: 'Scotch-Brite', price: 1299, stock: 70, ratings: 4.2, ratingCount: 34500 },
+  ];
+
+  // ─── BEAUTY & HEALTH (10 products) ───────────────────────────────────
+  const beauty = [
+    { title: 'Maybelline Fit Me Matte+Poreless Foundation', description: 'Liquid foundation, matte finish, poreless look, oil-free, lightweight.', features: JSON.stringify(['Matte finish','Oil-free','Lightweight','SPF 22','6 shades']), tags: 'foundation,maybelline,makeup,beauty,matte,face', brand: 'Maybelline', price: 499, stock: 120, ratings: 4.2, ratingCount: 45600 },
+    { title: 'Himalaya Neem Face Wash (200ml)', description: 'Purifying neem face wash. Soap-free, herbal formulation, for acne-prone skin.', features: JSON.stringify(['200ml','Neem extract','Soap-free','Herbal','For oily skin']), tags: 'face wash,himalaya,neem,skincare,herbal,acne', brand: 'Himalaya', price: 199, stock: 200, ratings: 4.3, ratingCount: 78900 },
+    { title: "Philips BT3221/15 Men's Beard Trimmer", description: '20 length settings, 90 min cordless use, DuraPower technology, stainless steel blades.', features: JSON.stringify(['20 length settings','90 min battery','DuraPower tech','SS blades','USB charging']), tags: 'trimmer,philips,beard,mens,grooming,cordless', brand: 'Philips', price: 1599, stock: 80, ratings: 4.4, ratingCount: 34500 },
+    { title: "Nivea Soft Light Moisturizing Cream (200ml)", description: 'Refreshingly soft moisturizing cream with Vitamin E and Jojoba Oil.', features: JSON.stringify(['200ml','Vitamin E','Jojoba oil','Non-greasy','Quick absorbing']), tags: 'moisturizer,nivea,cream,skin care,body care,soft', brand: 'Nivea', price: 249, stock: 150, ratings: 4.3, ratingCount: 56700 },
+    { title: "Lakme Absolute Gel Stylist Nail Color (Scarlet Red)", description: 'Gel-like shine nail polish. Chip resistant, quick drying, high coverage.', features: JSON.stringify(['Gel shine','Chip resistant','Quick drying','High coverage','Scarlet Red']), tags: 'nail polish,lakme,beauty,nails,color,gel,makeup', brand: 'Lakme', price: 199, stock: 100, ratings: 4.1, ratingCount: 23400 },
+    { title: "WOW Skin Science Apple Cider Vinegar Shampoo (300ml)", description: 'Sulphate & paraben free shampoo. Restores natural shine, gentle cleansing.', features: JSON.stringify(['300ml','Sulphate free','Paraben free','ACV extract','Gentle cleansing']), tags: 'shampoo,wow,apple cider vinegar,hair care,natural,organic', brand: 'WOW', price: 449, stock: 90, ratings: 4.2, ratingCount: 34500 },
+    { title: "Biotique Bio Aloe Vera Sunscreen SPF 30 (50g)", description: 'Sun protection with aloe vera. Lightweight, non-greasy, suitable for all skin types.', features: JSON.stringify(['SPF 30','Aloe vera','Non-greasy','All skin types','50g']), tags: 'sunscreen,biotique,aloe vera,spf,sun protection,skin care', brand: 'Biotique', price: 249, stock: 120, ratings: 4.1, ratingCount: 18900 },
+    { title: "Oral-B Vitality 100 Electric Toothbrush", description: '2D cleaning action, 2-minute timer, 1 brush head, rechargeable, gentle on gums.', features: JSON.stringify(['2D cleaning','2-min timer','Rechargeable','1 brush head','Gentle gums']), tags: 'toothbrush,electric,oral-b,dental,hygiene,oral care', brand: 'Oral-B', price: 1299, stock: 60, ratings: 4.4, ratingCount: 12400 },
+    { title: "Park Avenue Good Morning Grooming Kit", description: 'Complete grooming kit with shaving cream, after shave, deo, and shampoo.', features: JSON.stringify(['Shaving cream','After shave','Deodorant','Shampoo','Gift box']), tags: 'grooming kit,park avenue,mens,shaving,deo,gift set', brand: 'Park Avenue', price: 499, stock: 80, ratings: 4.0, ratingCount: 8900 },
+    { title: "mCaffeine Coffee Body Scrub (100g)", description: 'Exfoliating coffee body scrub with coconut. Removes tan, dead skin, and smoothens.', features: JSON.stringify(['100g','Coffee extract','Coconut oil','Exfoliating','Tan removal']), tags: 'body scrub,mcaffeine,coffee,exfoliator,skin care,body care', brand: 'mCaffeine', price: 449, stock: 70, ratings: 4.3, ratingCount: 23400 },
+  ];
+
+  // ─── SPORTS & OUTDOORS (5 products) ──────────────────────────────────
+  const sports = [
+    { title: 'Nivia Storm Football (Size 5)', description: 'Machine stitched, PVC material, suitable for hard ground, all-weather performance.', features: JSON.stringify(['Size 5','PVC material','Machine stitched','Hard ground','All-weather']), tags: 'football,nivia,sports,outdoor,soccer,ball', brand: 'Nivia', price: 499, stock: 80, ratings: 4.2, ratingCount: 12400 },
+    { title: 'Strauss ST-1520 Yoga Mat (6mm) - Blue', description: 'Anti-slip yoga mat with carrying strap. Lightweight, durable, for yoga and workout.', features: JSON.stringify(['6mm thickness','Anti-slip','Carrying strap','Lightweight','NBR material']), tags: 'yoga mat,strauss,fitness,yoga,workout,gym,exercise', brand: 'Strauss', price: 599, stock: 100, ratings: 4.3, ratingCount: 18900 },
+    { title: 'Cosco Aero 757 Badminton Racket (Pack of 2)', description: 'Lightweight aluminium frame, synthetic gut strings, comfortable grip, 2 rackets.', features: JSON.stringify(['Pack of 2','Aluminium frame','Synthetic gut','Comfortable grip','Cover included']), tags: 'badminton,racket,cosco,sports,outdoor,game', brand: 'Cosco', price: 499, stock: 60, ratings: 4.1, ratingCount: 9800 },
+    { title: 'PowerMax Fitness TDM-98 Treadmill (2HP)', description: '2HP motor, manual incline, 12km/h max speed, LCD display, AUX input, foldable.', features: JSON.stringify(['2HP motor','Manual incline','12km/h','LCD display','Foldable']), tags: 'treadmill,fitness,powermax,gym,running,cardio,home gym', brand: 'PowerMax', price: 21999, stock: 15, ratings: 4.2, ratingCount: 5600 },
+    { title: 'Boldfit Adjustable Dumbbell Set (20kg)', description: 'PVC coated dumbbell set with adjustable plates. Comes with rod and weight plates.', features: JSON.stringify(['20kg total','PVC coated','Adjustable','Includes rod','Weight plates']), tags: 'dumbbell,boldfit,gym,fitness,weights,home workout,strength', brand: 'Boldfit', price: 1499, stock: 40, ratings: 4.1, ratingCount: 7800 },
+  ];
+
+  // ─── TOYS & GAMES (5 products) ───────────────────────────────────────
+  const toys = [
+    { title: 'LEGO Classic Creative Bricks Box (484 pcs)', description: '484 colorful LEGO bricks in 33 colors. Build anything imaginable. Ages 4+.', features: JSON.stringify(['484 pieces','33 colors','Ages 4+','Creative building','LEGO Classic']), tags: 'lego,building blocks,toys,kids,creative,classic', brand: 'LEGO', price: 2499, stock: 40, ratings: 4.7, ratingCount: 12400 },
+    { title: 'Funskool Monopoly Board Game', description: 'Classic property trading game for families. Buy, sell, trade and win.', features: JSON.stringify(['2-6 players','Ages 8+','Property trading','Classic edition','60min gameplay']), tags: 'monopoly,board game,funskool,family,game,strategy', brand: 'Funskool', price: 599, stock: 50, ratings: 4.5, ratingCount: 18900 },
+    { title: 'Hot Wheels 20-Car Gift Pack', description: '20 die-cast Hot Wheels cars in 1:64 scale. Collectors and kids edition.', features: JSON.stringify(['20 cars','1:64 scale','Die-cast','Collectors','Assorted designs']), tags: 'hot wheels,cars,toys,kids,die cast,collection', brand: 'Hot Wheels', price: 1599, stock: 35, ratings: 4.4, ratingCount: 8900 },
+    { title: 'Rubik\'s Cube 3x3 - Original (Funskool)', description: 'The classic Rubik\'s Cube. 3x3 puzzle, smooth turning mechanism, over 43 quintillion combinations.', features: JSON.stringify(['3x3','Smooth turning','Classic puzzle','Original licensed','Ages 8+']), tags: 'rubiks cube,puzzle,brain teaser,toys,classic,game', brand: 'Funskool', price: 349, stock: 80, ratings: 4.3, ratingCount: 15600 },
+    { title: 'Nerf Elite 2.0 Commander RD-6 Blaster', description: 'Rotating drum, 12 Nerf darts, slam-fire action, tactical rail, indoor/outdoor.', features: JSON.stringify(['Rotating drum','12 darts included','Slam-fire','Tactical rail','Ages 8+']), tags: 'nerf,blaster,toys,outdoor,action,darts,gun', brand: 'Nerf', price: 999, stock: 45, ratings: 4.3, ratingCount: 7800 },
+  ];
+
+  // ─── GROCERY (5 products) ────────────────────────────────────────────
+  const grocery = [
+    { title: 'Tata Gold Tea (500g)', description: 'Premium Assam tea blend with 15% long leaves. Rich aroma and strong taste.', features: JSON.stringify(['500g','Premium Assam','15% long leaves','Rich aroma','Strong taste']), tags: 'tea,tata,gold,beverage,assam,daily,grocery', brand: 'Tata', price: 249, stock: 200, ratings: 4.4, ratingCount: 56700 },
+    { title: 'Saffola Gold Edible Oil (5L)', description: 'Dual seed technology — sunflower + rice bran. Helps manage cholesterol. FSSAI certified.', features: JSON.stringify(['5L','Dual seed tech','Losorb technology','FSSAI','Cholesterol care']), tags: 'cooking oil,saffola,edible oil,healthy,kitchen,grocery', brand: 'Saffola', price: 849, stock: 100, ratings: 4.3, ratingCount: 34500 },
+    { title: 'Maggi 2-Minute Noodles Masala (Pack of 12)', description: 'India\'s favourite instant noodles. Ready in 2 minutes with the iconic masala flavour.', features: JSON.stringify(['Pack of 12','Masala flavour','2 min prep','70g each','Vegetarian']), tags: 'maggi,noodles,instant,snack,masala,grocery,quick', brand: 'Maggi', price: 168, stock: 300, ratings: 4.5, ratingCount: 89200 },
+    { title: 'Cadbury Dairy Milk Silk Oreo (60g x 7)', description: 'Creamy Dairy Milk Silk chocolate with Oreo cookie pieces. Irresistible treat.', features: JSON.stringify(['Pack of 7','60g each','Silk chocolate','Oreo cookies','Creamy']), tags: 'chocolate,cadbury,silk,oreo,snack,sweet,grocery', brand: 'Cadbury', price: 700, stock: 150, ratings: 4.6, ratingCount: 34500 },
+    { title: 'Aashirvaad Superior MP Atta (10kg)', description: '100% whole wheat flour. 0% Maida. Soft rotis every time. India\'s No.1 atta.', features: JSON.stringify(['10kg','Whole wheat','0% Maida','Soft rotis','ISI certified']), tags: 'atta,wheat,flour,aashirvaad,grocery,cooking,daily', brand: 'Aashirvaad', price: 499, stock: 100, ratings: 4.4, ratingCount: 67800 },
+  ];
+
+  // ─── INSERT ALL PRODUCTS ─────────────────────────────────────────────
+  const allProducts = [
+    ...electronics.map(p => ({ ...p, categoryId: catElectronics.id })),
+    ...fashion.map(p => ({ ...p, categoryId: catFashion.id })),
+    ...books.map(p => ({ ...p, categoryId: catBooks.id })),
+    ...homeKitchen.map(p => ({ ...p, categoryId: catHome.id })),
+    ...beauty.map(p => ({ ...p, categoryId: catBeauty.id })),
+    ...sports.map(p => ({ ...p, categoryId: catSports.id })),
+    ...toys.map(p => ({ ...p, categoryId: catToys.id })),
+    ...grocery.map(p => ({ ...p, categoryId: catGrocery.id })),
+  ];
+
+  console.log(`📦 Inserting ${allProducts.length} products...`);
+
+  for (let i = 0; i < allProducts.length; i++) {
+    const prod = allProducts[i];
+    const created = await prisma.product.create({
+      data: {
+        title: prod.title,
+        description: prod.description,
+        features: prod.features,
+        tags: prod.tags,
+        brand: prod.brand,
+        price: prod.price,
+        stock: prod.stock,
+        ratings: prod.ratings,
+        ratingCount: prod.ratingCount,
+        categoryId: prod.categoryId,
+      }
+    });
+    // Create 3 images per product with unique seeds
+    const seed1 = prod.title.replace(/[^a-zA-Z0-9]/g, '').slice(0, 15).toLowerCase();
+    await prisma.productImage.createMany({
+      data: [
+        { productId: created.id, url: `https://picsum.photos/seed/${seed1}a/400/400` },
+        { productId: created.id, url: `https://picsum.photos/seed/${seed1}b/400/400` },
+        { productId: created.id, url: `https://picsum.photos/seed/${seed1}c/400/400` },
+      ]
+    });
   }
 
+  // ─── DELIVERABLE PINCODES ────────────────────────────────────────────
   const pincodes = [
     { pincode: '110001', city: 'New Delhi', state: 'Delhi' },
     { pincode: '400001', city: 'Mumbai', state: 'Maharashtra' },
@@ -189,13 +222,14 @@ async function main() {
     { pincode: '380001', city: 'Ahmedabad', state: 'Gujarat' },
     { pincode: '226001', city: 'Lucknow', state: 'Uttar Pradesh' },
     { pincode: '834001', city: 'Ranchi', state: 'Jharkhand' },
+    { pincode: '440001', city: 'Nagpur', state: 'Maharashtra' },
+    { pincode: '411001', city: 'Pune', state: 'Maharashtra' },
   ];
-
   for (const pin of pincodes) {
     await prisma.deliverablePincode.upsert({ where: { pincode: pin.pincode }, update: {}, create: pin });
   }
 
-  console.log('Seeding complete!');
+  console.log(`✅ Seeding complete! ${allProducts.length} products across 8 categories.`);
 }
 
 main()

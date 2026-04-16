@@ -75,6 +75,10 @@ const Navbar = () => {
             <option value="Fashion">Fashion</option>
             <option value="Books">Books</option>
             <option value="Home & Kitchen">Home & Kitchen</option>
+            <option value="Beauty & Health">Beauty & Health</option>
+            <option value="Sports & Outdoors">Sports & Outdoors</option>
+            <option value="Toys & Games">Toys & Games</option>
+            <option value="Grocery">Grocery</option>
           </select>
           <input type="text" className="navbar__searchInput" placeholder="Search products, brands and more..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
           <button type="submit" className="navbar__searchIcon"><FiSearch /></button>
@@ -132,15 +136,13 @@ const Navbar = () => {
           <span className="subNavbar__item">Sell</span>
           <span className="subNavbar__item">Gift Cards</span>
           <span className="subNavbar__item">Amazon Pay</span>
-          <span className="subNavbar__item">Gift Ideas</span>
-          <span className="subNavbar__item">Buy Again</span>
+          <span className="subNavbar__item" onClick={() => navigate('/orders')}>Buy Again</span>
           <span className="subNavbar__item">Amazon Basics</span>
           <span className="subNavbar__item">Prime</span>
-          <span className="subNavbar__item">Today's Deals</span>
-          <span className="subNavbar__item">New Releases</span>
+          <span className="subNavbar__item">Gift Ideas</span>
         </div>
         <div className="subNavbar__banner">
-          <strong>Summer Escape Sale</strong> | Shop Now
+          <strong>Summer Escape Sale</strong> | Flat ₹100 Off on First Order
         </div>
       </div>
 

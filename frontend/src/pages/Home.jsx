@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ProductCard from '../components/ProductCard';
 import api from '../utils/api';
-import { useSearchParams } from 'react-router-dom';
-import { FiFilter, FiX } from 'react-icons/fi';
+import { useSearchParams, Link } from 'react-router-dom';
+import { FiFilter, FiX, FiChevronRight } from 'react-icons/fi';
 import './Home.scss';
 
 const PRICE_RANGES = [
@@ -39,7 +39,6 @@ const Home = () => {
   const prevSlide = () => setCurrentSlide((prev) => (prev === 0 ? CAROUSEL_IMAGES.length - 1 : prev - 1));
 
   useEffect(() => {
-    // Autoplay carousel
     const slideInterval = setInterval(nextSlide, 5000);
     return () => clearInterval(slideInterval);
   }, []);
@@ -75,25 +74,83 @@ const Home = () => {
 
   const clearFilters = () => setSearchParams({});
 
-  // Extract unique brands from loaded products
-  const brands = [...new Set(products.map(p => p.brand).filter(Boolean))];
+  // Home Page Grid Static Data (Hardcoded Sections)
+  const categoryGrids = [
+    {
+      title: 'Best of Electronics',
+      category: 'Electronics',
+      items: [
+        { name: 'Smartphones', img: 'https://picsum.photos/seed/iphone15a/200/200', query: 'Electronics' },
+        { name: 'Headphones', img: 'https://picsum.photos/seed/sonywha/200/200', query: 'Electronics' },
+        { name: 'Laptops', img: 'https://picsum.photos/seed/macairm2a/200/200', query: 'Electronics' },
+        { name: 'Watches', img: 'https://picsum.photos/seed/galaxywatcha/200/200', query: 'Electronics' }
+      ]
+    },
+    {
+      title: 'Fashion Trends',
+      category: 'Fashion',
+      items: [
+        { name: 'Men\'s Clothing', img: 'https://picsum.photos/seed/levisa/200/200', query: 'Fashion' },
+        { name: 'Women\'s Ethnic', img: 'https://picsum.photos/seed/bibaa/200/200', query: 'Fashion' },
+        { name: 'Footwear', img: 'https://picsum.photos/seed/nikeairma/200/200', query: 'Fashion' },
+        { name: 'Watches', img: 'https://picsum.photos/seed/titana/200/200', query: 'Fashion' }
+      ]
+    },
+    {
+      title: 'Home Essentials',
+      category: 'Home & Kitchen',
+      items: [
+        { name: 'Kitchen', img: 'https://picsum.photos/seed/fryera/200/200', query: 'Home & Kitchen' },
+        { name: 'Bedding', img: 'https://picsum.photos/seed/bedsheeta/200/200', query: 'Home & Kitchen' },
+        { name: 'Cleaning', img: 'https://picsum.photos/seed/roombaa/200/200', query: 'Home & Kitchen' },
+        { name: 'Storage', img: 'https://picsum.photos/seed/flaska/200/200', query: 'Home & Kitchen' }
+      ]
+    },
+    {
+      title: 'Great Reads',
+      category: 'Books',
+      items: [
+        { name: 'Self Help', img: 'https://picsum.photos/seed/atomica/200/200', query: 'Books' },
+        { name: 'Fiction', img: 'https://picsum.photos/seed/alcha/200/200', query: 'Books' },
+        { name: 'Bestsellers', img: 'https://picsum.photos/seed/moneypsycha/200/200', query: 'Books' },
+        { name: 'Business', img: 'https://picsum.photos/seed/richdada/200/200', query: 'Books' }
+      ]
+    }
+  ];
 
   return (
     <div className="home">
-      {/* Hero Banner Carousel (only on home without search) */}
       {!isSearchActive && (
-        <div className="home__carousel">
-          <button className="home__carouselBtn prev" onClick={prevSlide}>&#10094;</button>
-          <div className="home__carouselTrack" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-            {CAROUSEL_IMAGES.map((img, i) => (
-              <img key={i} src={img} alt={`Banner ${i + 1}`} className="home__carouselImg" />
+        <>
+          <div className="home__carousel">
+            <button className="home__carouselBtn prev" onClick={prevSlide}>&#10094;</button>
+            <div className="home__carouselTrack" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+              {CAROUSEL_IMAGES.map((img, i) => (
+                <img key={i} src={img} alt={`Banner ${i + 1}`} className="home__carouselImg" />
+              ))}
+            </div>
+            <button className="home__carouselBtn next" onClick={nextSlide}>&#10095;</button>
+          </div>
+
+          <div className="home__grids">
+            {categoryGrids.map((grid, idx) => (
+              <div key={idx} className="home__gridCard">
+                <h3>{grid.title}</h3>
+                <div className="home__gridItems">
+                  {grid.items.map((item, i) => (
+                    <div key={i} className="home__gridItem" onClick={() => updateParam('category', item.query)}>
+                      <img src={item.img} alt={item.name} />
+                      <span>{item.name}</span>
+                    </div>
+                  ))}
+                </div>
+                <Link to={`/?category=${grid.category}`} className="home__gridLink">See all results <FiChevronRight /></Link>
+              </div>
             ))}
           </div>
-          <button className="home__carouselBtn next" onClick={nextSlide}>&#10095;</button>
-        </div>
+        </>
       )}
 
-      {/* Search Results Header */}
       {isSearchActive && (
         <div className="home__searchHeader">
           <div className="home__searchInfo">
@@ -101,7 +158,6 @@ const Home = () => {
             {search && <span>for "<strong>{search}</strong>"</span>}
             {category && <span className="home__filterTag">{category} <FiX onClick={() => updateParam('category', '')} /></span>}
             {brand && <span className="home__filterTag">{brand} <FiX onClick={() => updateParam('brand', '')} /></span>}
-            {(minPrice || maxPrice) && <span className="home__filterTag">₹{minPrice || 0} – ₹{maxPrice || '∞'} <FiX onClick={() => { updateParam('minPrice', ''); updateParam('maxPrice', ''); }} /></span>}
             <button className="home__clearBtn" onClick={clearFilters}>Clear all</button>
           </div>
           <div className="home__sortRow">
@@ -117,25 +173,21 @@ const Home = () => {
       )}
 
       <div className="home__body">
-        {/* Sidebar Filters */}
         {isSearchActive && (
           <aside className={`home__sidebar ${showFilters ? 'open' : ''}`}>
             <div className="home__sidebarHeader">
               <h3>Filters</h3>
               <button className="home__sidebarClose" onClick={() => setShowFilters(false)}><FiX /></button>
             </div>
-
             <div className="filterGroup">
               <h4>Category</h4>
-              {['Electronics', 'Fashion', 'Books', 'Home & Kitchen'].map(c => (
+              {['Electronics', 'Fashion', 'Books', 'Home & Kitchen', 'Beauty & Health', 'Sports & Outdoors', 'Toys & Games', 'Grocery'].map(c => (
                 <label key={c} className="filterGroup__item">
                   <input type="radio" name="cat" checked={category === c} onChange={() => updateParam('category', c)} />
                   {c}
                 </label>
               ))}
-              {category && <button className="filterGroup__clear" onClick={() => updateParam('category', '')}>Clear</button>}
             </div>
-
             <div className="filterGroup">
               <h4>Price</h4>
               {PRICE_RANGES.map(r => (
@@ -146,37 +198,25 @@ const Home = () => {
                   {r.label}
                 </label>
               ))}
-              {(minPrice || maxPrice) && <button className="filterGroup__clear" onClick={() => { updateParam('minPrice', ''); updateParam('maxPrice', ''); }}>Clear</button>}
             </div>
-
-            {brands.length > 0 && (
-              <div className="filterGroup">
-                <h4>Brand</h4>
-                {brands.map(b => (
-                  <label key={b} className="filterGroup__item">
-                    <input type="radio" name="brand" checked={brand === b} onChange={() => updateParam('brand', b)} />
-                    {b}
-                  </label>
-                ))}
-                {brand && <button className="filterGroup__clear" onClick={() => updateParam('brand', '')}>Clear</button>}
-              </div>
-            )}
           </aside>
         )}
 
-        {/* Products Grid */}
         <div className="home__main">
           {loading ? (
             <div className="home__loading"><div className="home__spinner" /></div>
-          ) : products.length === 0 ? (
-            <div className="home__empty">
-              <h3>No results found</h3>
-              <p>Try different keywords or clear filters.</p>
-            </div>
           ) : (
-            <div className="home__row">
-              {products.map(product => <ProductCard key={product.id} product={product} />)}
-            </div>
+            <>
+              {isSearchActive && products.length === 0 && (
+                <div className="home__empty">
+                  <h3>No results found</h3>
+                  <p>Try different keywords or clear filters.</p>
+                </div>
+              )}
+              <div className="home__row">
+                {products.map(product => <ProductCard key={product.id} product={product} />)}
+              </div>
+            </>
           )}
         </div>
       </div>

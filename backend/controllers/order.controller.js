@@ -1,9 +1,27 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
+// ─── Email Utilities ───────────────────────────────────────────────────
+const sendEmail = require('../utils/sendEmail');
+const { orderConfirmationTemplate } = require('../utils/emailTemplates');
+
 const DELIVERY_CHARGE = 49;
 const TAX_RATE = 0.18; // 18% GST
 const FREE_DELIVERY_THRESHOLD = 999;
+
+/**
+ * Generates a unique, meaningful order number.
+ * Format: ORD-YYYYMMDD-U{userId}-{random4digit}
+ * Example: ORD-20260416-U5-3847
+ */
+const generateOrderNumber = (userId) => {
+  const now = new Date();
+  const datePart = now.getFullYear().toString() +
+    String(now.getMonth() + 1).padStart(2, '0') +
+    String(now.getDate()).padStart(2, '0');
+  const random = String(Math.floor(1000 + Math.random() * 9000)); // 4-digit random
+  return `ORD-${datePart}-U${userId}-${random}`;
+};
 
 const placeOrder = async (req, res) => {
   const { addressId, paymentMethod } = req.body;
@@ -14,6 +32,9 @@ const placeOrder = async (req, res) => {
   }
 
   try {
+    // Generate order number before transaction
+    const orderNumber = generateOrderNumber(userId);
+
     const result = await prisma.$transaction(async (tx) => {
       // Verify address belongs to user
       const address = await tx.address.findFirst({ where: { id: parseInt(addressId), userId } });
@@ -41,6 +62,7 @@ const placeOrder = async (req, res) => {
 
       const order = await tx.order.create({
         data: {
+          orderNumber,
           userId,
           addressId: parseInt(addressId),
           subtotal,
@@ -66,6 +88,53 @@ const placeOrder = async (req, res) => {
 
       return order;
     });
+
+    // ─── Send Order Confirmation Email (non-blocking) ────────────────
+    try {
+      const fullOrder = await prisma.order.findUnique({
+        where: { id: result.id },
+        include: {
+          user: true,
+          address: true,
+          orderItems: { include: { product: true } }
+        }
+      });
+
+      if (fullOrder && fullOrder.user?.email) {
+        const deliveryDate = new Date();
+        deliveryDate.setDate(deliveryDate.getDate() + 5 + Math.floor(Math.random() * 3));
+        const estimatedDelivery = deliveryDate.toLocaleDateString('en-IN', {
+          weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+        });
+
+        const products = fullOrder.orderItems.map((item) => ({
+          title: item.product.title,
+          quantity: item.quantity,
+          price: item.price
+        }));
+
+        const html = orderConfirmationTemplate({
+          userName: fullOrder.user.name,
+          orderNumber: fullOrder.orderNumber,
+          products,
+          subtotal: fullOrder.subtotal,
+          deliveryCharge: fullOrder.deliveryCharge,
+          tax: fullOrder.tax,
+          totalAmount: fullOrder.totalAmount,
+          address: fullOrder.address,
+          paymentMethod: fullOrder.paymentMethod,
+          estimatedDelivery
+        });
+
+        await sendEmail({
+          to: fullOrder.user.email,
+          subject: `Amazon 247 — Order Confirmed! ${fullOrder.orderNumber}`,
+          html
+        });
+      }
+    } catch (emailError) {
+      console.error('⚠️  Email notification failed (order still placed):', emailError.message);
+    }
 
     res.status(201).json({ message: 'Order placed successfully!', order: result });
   } catch (error) {
@@ -126,7 +195,6 @@ const cancelOrder = async (req, res) => {
     }
 
     await prisma.$transaction(async (tx) => {
-      // Restore stock for each item
       for (const item of order.orderItems) {
         await tx.product.update({
           where: { id: item.productId },

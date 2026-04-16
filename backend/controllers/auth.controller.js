@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
+const sendEmail = require('../utils/sendEmail');
+const { passwordResetTemplate } = require('../utils/emailTemplates');
 
 const prisma = new PrismaClient();
 
@@ -37,11 +39,7 @@ const register = async (req, res) => {
     res.status(201).json({
       message: "User registered successfully",
       token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email
-      }
+      user: { id: user.id, name: user.name, email: user.email }
     });
   } catch (error) {
     console.error("Register Error:", error);
@@ -78,11 +76,7 @@ const login = async (req, res) => {
     res.status(200).json({
       message: "Login successful",
       token,
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email
-      }
+      user: { id: user.id, name: user.name, email: user.email }
     });
 
   } catch (error) {
@@ -93,7 +87,6 @@ const login = async (req, res) => {
 
 const getMe = async (req, res) => {
   try {
-    // req.userId is set by the auth middleware
     const user = await prisma.user.findUnique({
       where: { id: req.userId },
       select: {
@@ -115,8 +108,67 @@ const getMe = async (req, res) => {
   }
 };
 
+const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Please provide your email address.' });
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) return res.status(404).json({ error: 'No account found with this email.' });
+
+    // Generate 6 digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const expiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes from now
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { resetOtp: otp, resetOtpExpiry: expiry }
+    });
+
+    const html = passwordResetTemplate({ userName: user.name, otp });
+    await sendEmail({
+      to: email,
+      subject: 'Amazon 247 — Password Reset Requested',
+      html
+    });
+
+    res.status(200).json({ message: 'OTP sent to your email.' });
+  } catch (error) {
+    console.error('Forgot Password Error:', error);
+    res.status(500).json({ error: 'Failed to send reset email.' });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const { email, otp, newPassword } = req.body;
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ error: 'Please provide email, OTP, and new password.' });
+    }
+
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user || user.resetOtp !== otp || new Date() > new Date(user.resetOtpExpiry)) {
+      return res.status(400).json({ error: 'Invalid or expired OTP.' });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { password: hashedPassword, resetOtp: null, resetOtpExpiry: null }
+    });
+
+    res.status(200).json({ message: 'Password reset successful. You can now log in.' });
+  } catch (error) {
+    console.error('Reset Password Error:', error);
+    res.status(500).json({ error: 'Failed to reset password.' });
+  }
+};
+
 module.exports = {
   register,
   login,
-  getMe
+  getMe,
+  forgotPassword,
+  resetPassword
 };
