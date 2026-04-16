@@ -1,120 +1,261 @@
 .productCard {
   position: relative;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
   background: white;
   border: 1px solid #e3e3e3;
   border-radius: 4px; /* Standard Amazon rounding */
-  padding: 20px;
+  padding: 20px 16px;
   text-decoration: none;
   color: inherit;
   transition: box-shadow 0.2s;
   cursor: pointer;
-  height: 100%;
+  height: auto;
+  gap: 20px;
+  align-items: start;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
 
   &:hover {
     box-shadow: 0 4px 16px rgba(0,0,0,0.12);
   }
 
-  &__heart {
+  &__sponsored {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    background: white;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    color: #ccc;
-    border-radius: 50%;
-    width: 34px;
-    height: 34px;
+    top: 8px;
+    left: 16px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-    z-index: 2;
-    transition: all 0.2s;
-
-    &:hover { color: #e31b23; transform: scale(1.1); }
-    &.wishlisted { color: #e31b23; }
+    gap: 4px;
+    font-size: 12px;
+    color: #666;
+    background: transparent;
+    z-index: 1;
+    
+    span {
+      font-weight: 500;
+      font-size: 12px;
+    }
+    
+    svg {
+      color: #999;
+    }
   }
 
   &__imgWrap {
-    width: 100%;
+    width: 180px;
     height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+    background: #f5f5f5;
+    border-radius: 4px;
 
     img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  }
+
+  &__details { 
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding-top: 20px;
   }
 
   &__info { 
     display: flex;
     flex-direction: column;
-    flex: 1; 
+    gap: 4px;
   }
 
   &__brand {
     font-size: 13px;
     color: #007185;
-    margin-bottom: 4px;
+    margin: 0;
+    font-weight: 500;
     &:hover { color: #c45500; text-decoration: underline; }
   }
 
   &__title {
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 1.3em;
-    height: 2.6em; /* Exactly two lines */
-    margin-bottom: 8px;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6em;
+    height: auto;
+    margin: 0;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     color: #0f1111;
   }
 
-  &__rating {
+  &__titleWrap {
     display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 13px;
-    margin-bottom: 8px;
+    gap: 6px;
+    align-items: flex-start;
   }
 
-  &__ratingStar { color: #f90; font-size: 14px; }
+  &__trendingIcon {
+    font-size: 18px;
+    color: #c45500;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  &__ratingWrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+  }
+
+  &__starsContainer {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+  }
+
+  &__starWrapper {
+    position: relative;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  &__starBackground {
+    position: absolute;
+    font-size: 16px;
+    color: #ddd;
+    z-index: 1;
+  }
+
+  &__starFilled {
+    position: absolute;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    z-index: 2;
+  }
+
+  &__starIcon {
+    font-size: 16px;
+    color: #f90;
+  }
+
+  &__ratingValue {
+    font-size: 15px;
+    color: #0f1111;
+    font-weight: 700;
+  }
   &__ratingCount { color: #007185; font-size: 13px; }
 
-  &__price {
-    font-size: 21px;
+  &__socialProof {
+    font-size: 13px;
+    color: #555;
+    margin: 0;
     font-weight: 500;
+  }
+
+  &__priceSection {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    flex-wrap: wrap;
+  }
+
+  &__price {
+    font-size: 20px;
+    font-weight: 700;
     color: #0f1111;
-    margin-bottom: 12px;
     display: flex;
     align-items: flex-start;
+    margin: 0;
     
     &::before {
       content: '₹';
-      font-size: 13px;
+      font-size: 12px;
+      margin-right: 2px;
       margin-top: 3px;
-      margin-right: 1px;
     }
   }
 
+  &__originalPrice {
+    font-size: 13px;
+    color: #666;
+    text-decoration: line-through;
+    margin: 0;
+  }
+
+  &__discount {
+    font-size: 13px;
+    color: #b12704;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  &__offer {
+    font-size: 14px;
+    color: #007185;
+    margin: 0;
+    font-weight: 500;
+  }
+
+  &__delivery {
+    font-size: 14px;
+    color: #188a00;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+  }
+
+  &__deliveryIcon {
+    font-size: 14px;
+  }
+
+  &__deliveryDate {
+    font-weight: 700;
+    margin-left: 2px;
+  }
+
+  &__stockWarning {
+    font-size: 14px;
+    color: #b12704;
+    font-weight: 700;
+    margin: 0;
+  }
+
   &__cartBtn {
-    width: 100%;
-    margin-top: auto;
+    width: auto;
+    height: fit-content;
     background: #FFD814;
     border: 1px solid #FCD200;
     border-radius: 20px;
-    padding: 7px 0;
-    font-size: 13px;
+    padding: 10px 28px;
+    font-size: 15px;
+    font-weight: 600;
     color: #0f1111;
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(213,217,217,.5);
+    white-space: nowrap;
+    transition: all 0.2s;
+    align-self: start;
+    margin-top: 8px;
+    flex-shrink: 0;
+    font-family: inherit;
     
-    &:hover { background: #F7CA00; border-color: #F2C200; }
+    &:hover { 
+      background: #F7CA00; 
+      border-color: #F2C200;
+      box-shadow: 0 4px 8px rgba(213,217,217,.7);
+    }
   }
 }

@@ -185,6 +185,10 @@ async function main() {
 
   for (let i = 0; i < allProducts.length; i++) {
     const prod = allProducts[i];
+    // Calculate original price (20-30% higher than selling price for discount effect)
+    const discountPercent = 15 + Math.floor(Math.random() * 15); // 15-30% discount
+    const originalPrice = Math.round(prod.price * (100 + discountPercent) / 100);
+    
     const created = await prisma.product.create({
       data: {
         title: prod.title,
@@ -193,9 +197,12 @@ async function main() {
         tags: prod.tags,
         brand: prod.brand,
         price: prod.price,
+        originalPrice: originalPrice,
         stock: prod.stock,
         ratings: prod.ratings,
         ratingCount: prod.ratingCount,
+        freeDelivery: true,
+        boughtCount: Math.floor(Math.random() * 5000) + 100,
         categoryId: prod.categoryId,
       }
     });

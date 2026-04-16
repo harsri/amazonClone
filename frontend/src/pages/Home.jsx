@@ -199,6 +199,15 @@ const Home = () => {
                 </label>
               ))}
             </div>
+            <div className="filterGroup">
+              <h4>Brands</h4>
+              {['Apple', 'Samsung', 'OnePlus', 'Realme', 'Motorola', 'Xiaomi', 'POCO', 'Oppo'].map(b => (
+                <label key={b} className="filterGroup__item">
+                  <input type="checkbox" checked={brand.includes(b)} onChange={() => updateParam('brand', brand === b ? '' : b)} />
+                  {b}
+                </label>
+              ))}
+            </div>
           </aside>
         )}
 

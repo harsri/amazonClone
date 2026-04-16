@@ -1,0 +1,242 @@
+@charset "UTF-8";
+.productCard {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  background: white;
+  border: 1px solid #e3e3e3;
+  border-radius: 4px; /* Standard Amazon rounding */
+  padding: 20px 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s;
+  cursor: pointer;
+  height: auto;
+  gap: 20px;
+  align-items: start;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+}
+.productCard:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+.productCard__sponsored {
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #666;
+  background: transparent;
+  z-index: 1;
+}
+.productCard__sponsored span {
+  font-weight: 500;
+  font-size: 12px;
+}
+.productCard__sponsored svg {
+  color: #999;
+}
+.productCard__imgWrap {
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+  flex-shrink: 0;
+  background: #f5f5f5;
+  border-radius: 4px;
+}
+.productCard__imgWrap img {
+  max-width: 100%;
+  max-height: 100%;
+  -o-object-fit: contain;
+     object-fit: contain;
+}
+.productCard__details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-top: 20px;
+}
+.productCard__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.productCard__brand {
+  font-size: 13px;
+  color: #007185;
+  margin: 0;
+  font-weight: 500;
+}
+.productCard__brand:hover {
+  color: #c45500;
+  text-decoration: underline;
+}
+.productCard__title {
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.6em;
+  height: auto;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: #0f1111;
+}
+.productCard__titleWrap {
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}
+.productCard__trendingIcon {
+  font-size: 18px;
+  color: #c45500;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.productCard__ratingWrapper {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+}
+.productCard__starsContainer {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.productCard__starWrapper {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.productCard__starBackground {
+  position: absolute;
+  font-size: 16px;
+  color: #ddd;
+  z-index: 1;
+}
+.productCard__starFilled {
+  position: absolute;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+.productCard__starIcon {
+  font-size: 16px;
+  color: #f90;
+}
+.productCard__ratingValue {
+  font-size: 15px;
+  color: #0f1111;
+  font-weight: 700;
+}
+.productCard__ratingCount {
+  color: #007185;
+  font-size: 13px;
+}
+.productCard__socialProof {
+  font-size: 13px;
+  color: #555;
+  margin: 0;
+  font-weight: 500;
+}
+.productCard__priceSection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  flex-wrap: wrap;
+}
+.productCard__price {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f1111;
+  display: flex;
+  align-items: flex-start;
+  margin: 0;
+}
+.productCard__price::before {
+  content: "₹";
+  font-size: 12px;
+  margin-right: 2px;
+  margin-top: 3px;
+}
+.productCard__originalPrice {
+  font-size: 13px;
+  color: #666;
+  text-decoration: line-through;
+  margin: 0;
+}
+.productCard__discount {
+  font-size: 13px;
+  color: #b12704;
+  font-weight: 700;
+  margin: 0;
+}
+.productCard__offer {
+  font-size: 14px;
+  color: #007185;
+  margin: 0;
+  font-weight: 500;
+}
+.productCard__delivery {
+  font-size: 14px;
+  color: #188a00;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+}
+.productCard__deliveryIcon {
+  font-size: 14px;
+}
+.productCard__deliveryDate {
+  font-weight: 700;
+  margin-left: 2px;
+}
+.productCard__stockWarning {
+  font-size: 14px;
+  color: #b12704;
+  font-weight: 700;
+  margin: 0;
+}
+.productCard__cartBtn {
+  width: auto;
+  height: -moz-fit-content;
+  height: fit-content;
+  background: #FFD814;
+  border: 1px solid #FCD200;
+  border-radius: 20px;
+  padding: 10px 28px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f1111;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(213, 217, 217, 0.5);
+  white-space: nowrap;
+  transition: all 0.2s;
+  align-self: start;
+  margin-top: 8px;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+.productCard__cartBtn:hover {
+  background: #F7CA00;
+  border-color: #F2C200;
+  box-shadow: 0 4px 8px rgba(213, 217, 217, 0.7);
+}/*# sourceMappingURL=ProductCard.css.map */
