@@ -130,9 +130,17 @@
 
   &__paymentCards {
     display: flex;
-    gap: 6px;
-    margin-top: 6px;
-    img { height: 20px; width: auto; }
+    gap: 12px;
+    margin-top: 10px;
+    img { 
+      height: 32px; 
+      width: auto; 
+      object-fit: contain;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 2px;
+    }
   }
 
   &__right { width: 320px; flex-shrink: 0; position: sticky; top: 80px; }

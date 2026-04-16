@@ -149,11 +149,11 @@ const Checkout = () => {
                   <div className="checkout__paymentDetails">
                     <strong>Credit / Debit Card</strong>
                     <div className="checkout__paymentCards">
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Mastercard-logo.svg/1280px-Mastercard-logo.svg.png" alt="MC" />
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/2560px-Visa_Inc._logo.svg.png" alt="Visa" />
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/American_Express_logo_%left%right.svg/1200px-American_Express_logo_%left%right.svg.png" alt="Amex" />
+                      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 36'%3E%3Crect fill='%231A1F71' width='56' height='36' rx='2'/%3E%3Ccircle cx='21' cy='18' r='10' fill='%23EB001B'/%3E%3Ccircle cx='35' cy='18' r='10' fill='%23FF5F00'/%3E%3C/svg%3E" alt="Mastercard" title="Mastercard" />
+                      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 32'%3E%3Crect fill='%231434CB' width='48' height='32'/%3E%3Ctext x='24' y='20' font-size='14' fill='white' text-anchor='middle' font-weight='bold'%3EVISA%3C/text%3E%3C/svg%3E" alt="Visa" title="Visa" />
+                      <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 32'%3E%3Crect fill='%23006FCF' width='48' height='32'/%3E%3Ctext x='24' y='20' font-size='10' fill='white' text-anchor='middle' font-weight='bold'%3EAMEX%3C/text%3E%3C/svg%3E" alt="American Express" title="American Express" />
                     </div>
-                    <p style={{color: '#c45500', fontSize: '12px', marginTop: '4px'}}>Dummy payment gateway coming soon.</p>
+                    <p style={{color: '#c45500', fontSize: '12px', marginTop: '4px'}}>Payment gateway coming soon.</p>
                   </div>
                 </label>
                 <label className="checkout__paymentOption disabled" title="Currently implementing gateway">
